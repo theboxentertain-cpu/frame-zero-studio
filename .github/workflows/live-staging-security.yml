@@ -1,0 +1,50 @@
+name: FRAME ZERO live staging security test
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirmation:
+        description: 'Enter RUN FRAME ZERO STAGING TEST to create and remove an isolated test project'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: frame-zero-live-staging-test
+  cancel-in-progress: false
+
+jobs:
+  auth-isolation:
+    name: Verify real sign-in and project isolation
+    if: ${{ inputs.confirmation == 'RUN FRAME ZERO STAGING TEST' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      FZ_TEST_URL: https://crvgvcokzryoxyvjkhxn.supabase.co
+      FZ_TEST_PUBLIC_KEY: ${{ secrets.FZ_TEST_PUBLIC_KEY }}
+      FZ_TEST_A_EMAIL: ${{ secrets.FZ_TEST_A_EMAIL }}
+      FZ_TEST_A_PASSWORD: ${{ secrets.FZ_TEST_A_PASSWORD }}
+      FZ_TEST_B_EMAIL: ${{ secrets.FZ_TEST_B_EMAIL }}
+      FZ_TEST_B_PASSWORD: ${{ secrets.FZ_TEST_B_PASSWORD }}
+      FZ_STAGING_VERIFIED: "yes"
+    steps:
+      - name: Checkout FRAME ZERO
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run real authentication and cross-account isolation checks
+        run: |
+          node -e 'const e=process.env;const k=e.FZ_TEST_PUBLIC_KEY||"";if(e.FZ_TEST_URL!=="https://crvgvcokzryoxyvjkhxn.supabase.co"||!k||!e.FZ_TEST_A_EMAIL||!e.FZ_TEST_A_PASSWORD||!e.FZ_TEST_B_EMAIL||!e.FZ_TEST_B_PASSWORD)throw Error("Staging connection or test account GitHub secrets are missing.")'
+          node tests/live-staging.mjs
