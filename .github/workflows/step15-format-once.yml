@@ -1,6 +1,7 @@
 name: Step 15 format-once
 on:
-  workflow_dispatch:
+  push:
+    branches: [feature/step15-still-studio]
 permissions:
   contents: write
 jobs:
@@ -16,13 +17,13 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - run: npx prettier --write src/features/stills/data.ts src/features/stills/StillStudio.tsx
+      - run: npx prettier --write src/features/stills/data.ts src/features/stills/StillStudio.tsx tests/storyboard.test.mjs
       - name: Commit formatting only
         run: |
-          if ! git diff --quiet -- src/features/stills; then
+          if ! git diff --quiet -- src/features/stills tests/storyboard.test.mjs; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add src/features/stills/data.ts src/features/stills/StillStudio.tsx
+            git add src/features/stills/data.ts src/features/stills/StillStudio.tsx tests/storyboard.test.mjs
             git commit -m "style(step15): format new storyboard sources"
             git push origin HEAD:feature/step15-still-studio
           fi
