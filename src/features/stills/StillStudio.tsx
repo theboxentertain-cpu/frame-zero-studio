@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect -- This editor preserves unsaved human directions across server refetches. */
 import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
