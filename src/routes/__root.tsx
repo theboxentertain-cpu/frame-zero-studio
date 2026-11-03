@@ -22,7 +22,9 @@ function NotFoundComponent() {
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <p className="eyebrow">404</p>
-        <h1 className="mt-3 font-display text-5xl text-foreground">Page not found · الصفحة غير موجودة</h1>
+        <h1 className="mt-3 font-display text-5xl text-foreground">
+          Page not found · الصفحة غير موجودة
+        </h1>
         <div className="mt-8">
           <Link
             to="/"
@@ -46,8 +48,12 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
-        <h1 className="font-display text-3xl text-foreground">This page didn't load · تعذّر تحميل الصفحة</h1>
-        <p className="mt-2 text-sm text-muted-foreground">{error.message}</p>
+        <h1 className="font-display text-3xl text-foreground">
+          This page didn't load · تعذّر تحميل الصفحة
+        </h1>
+        <p className="mt-2 text-sm text-muted-foreground">
+          {error instanceof Error ? error.message : "Unexpected error · خطأ غير متوقع"}
+        </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
             onClick={() => {
@@ -77,7 +83,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
       { name: "theme-color", content: "#0C0E11" },
       { title: "FRAME ZERO · كادر صفر" },
-      { name: "description", content: "A bilingual filmmaker workspace: from one thought to the final cut." },
+      {
+        name: "description",
+        content: "A bilingual filmmaker workspace: from one thought to the final cut.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -120,7 +129,10 @@ function RootComponent() {
     const { data } = supabase.auth.onAuthStateChange((event) => {
       if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
       router.invalidate();
-      if (event !== "SIGNED_OUT") queryClient.invalidateQueries();
+      if (event === "SIGNED_OUT") {
+        queryClient.cancelQueries();
+        queryClient.clear();
+      } else queryClient.invalidateQueries();
     });
     return () => data.subscription.unsubscribe();
   }, [router, queryClient]);

@@ -15,6 +15,13 @@
       "when": 1793679033612,
       "tag": "0001_fix_gate_status_arrays",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793679033613,
+      "tag": "0002_recovery_security",
+      "breakpoints": true
     }
   ]
 }

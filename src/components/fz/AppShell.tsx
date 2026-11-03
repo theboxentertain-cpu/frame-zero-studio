@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import type { ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import {
   BookOpen,
   Clapperboard,
@@ -44,7 +44,9 @@ export function BrandMark({ compact = false }: { compact?: boolean }) {
         {locale === "ar" ? "كادر صفر" : "Frame Zero"}
       </span>
       {!compact && (
-        <span className="eyebrow hidden opacity-70 sm:inline">{locale === "ar" ? "FRAME ZERO" : "كادر صفر"}</span>
+        <span className="eyebrow hidden opacity-70 sm:inline">
+          {locale === "ar" ? "FRAME ZERO" : "كادر صفر"}
+        </span>
       )}
     </span>
   );
@@ -52,9 +54,12 @@ export function BrandMark({ compact = false }: { compact?: boolean }) {
 
 export function LangToggle() {
   const { locale, setLocale } = useI18n();
+  const [interactive, setInteractive] = useState(false);
+  useEffect(() => setInteractive(true), []);
   return (
     <button
       type="button"
+      disabled={!interactive}
       onClick={() => setLocale(locale === "ar" ? "en" : "ar")}
       className="tap inline-flex items-center justify-center gap-2 rounded-md px-3 text-sm text-muted-foreground hover:bg-accent hover:text-foreground"
       aria-label={locale === "ar" ? "Switch to English" : "التبديل إلى العربية"}
@@ -103,7 +108,9 @@ function ProjectNav({ projectId, onNavigate }: { projectId: string; onNavigate?:
         onClick={onNavigate}
         className={cn(
           "tap flex items-center gap-3 rounded-md px-3 text-sm transition-colors",
-          active ? "bg-champagne-dim text-champagne" : "text-sidebar-foreground/75 hover:bg-sidebar-accent hover:text-sidebar-foreground",
+          active
+            ? "bg-champagne-dim text-champagne"
+            : "text-sidebar-foreground/75 hover:bg-sidebar-accent hover:text-sidebar-foreground",
         )}
         title={tx(STATUS_LABEL[p.status])}
       >
@@ -125,7 +132,7 @@ function ProjectNav({ projectId, onNavigate }: { projectId: string; onNavigate?:
         {tx({ en: "Project overview", ar: "نظرة عامة" })}
       </Link>
       {WORLDS.map((w) => {
-        const Icon = WORLD_ICON[w.id];
+        const Icon = WORLD_ICON[w.id]!;
         return (
           <div key={w.id}>
             <div className="mb-1 flex items-center gap-2 px-3">
@@ -134,7 +141,9 @@ function ProjectNav({ projectId, onNavigate }: { projectId: string; onNavigate?:
                 {w.n} · {tx(w.label)}
               </span>
             </div>
-            <div className="space-y-0.5">{PAGES.filter((p) => p.world === w.id && p.scope === "project").map(item)}</div>
+            <div className="space-y-0.5">
+              {PAGES.filter((p) => p.world === w.id && p.scope === "project").map(item)}
+            </div>
             {w.id === "direct" && (
               <p className="px-3 pt-1 text-[11px] leading-snug text-muted-foreground">
                 {tx({
@@ -163,10 +172,21 @@ function GlobalNav({ onNavigate }: { onNavigate?: () => void }) {
   const active = "!bg-champagne-dim !text-champagne";
   return (
     <nav className="space-y-0.5">
-      <Link to="/projects" onClick={onNavigate} className={cls} activeOptions={{ exact: true }} activeProps={{ className: active }}>
+      <Link
+        to="/projects"
+        onClick={onNavigate}
+        className={cls}
+        activeOptions={{ exact: true }}
+        activeProps={{ className: active }}
+      >
         <LibraryBig className="size-4" /> {t("library")}
       </Link>
-      <Link to="/projects/new" onClick={onNavigate} className={cls} activeProps={{ className: active }}>
+      <Link
+        to="/projects/new"
+        onClick={onNavigate}
+        className={cls}
+        activeProps={{ className: active }}
+      >
         <Plus className="size-4" /> {t("newFilm")}
       </Link>
       <Link to="/account" onClick={onNavigate} className={cls} activeProps={{ className: active }}>
@@ -176,8 +196,16 @@ function GlobalNav({ onNavigate }: { onNavigate?: () => void }) {
   );
 }
 
-export function AppShell({ projectId, projectTitle, children }: { projectId?: string; projectTitle?: string; children: ReactNode }) {
-  const { tx, t } = useI18n();
+export function AppShell({
+  projectId,
+  projectTitle,
+  children,
+}: {
+  projectId?: string;
+  projectTitle?: string;
+  children: ReactNode;
+}) {
+  const { tx, t, dir } = useI18n();
   const signOut = useSignOut();
   const { pathname } = useLocation();
   const currentWorld = worldForPath(pathname);
@@ -215,11 +243,17 @@ export function AppShell({ projectId, projectTitle, children }: { projectId?: st
       <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-border bg-background/90 px-2 backdrop-blur md:hidden">
         <Sheet>
           <SheetTrigger asChild>
-            <button className="tap inline-flex items-center justify-center rounded-md" aria-label={tx({ en: "Menu", ar: "القائمة" })}>
+            <button
+              className="tap inline-flex items-center justify-center rounded-md"
+              aria-label={tx({ en: "Menu", ar: "القائمة" })}
+            >
               <Menu className="size-5" />
             </button>
           </SheetTrigger>
-          <SheetContent side="left" className="w-80 overflow-y-auto bg-sidebar p-3">
+          <SheetContent
+            side={dir === "rtl" ? "right" : "left"}
+            className="w-80 max-w-[90vw] overflow-y-auto bg-sidebar p-3"
+          >
             <SheetTitle className="px-3 py-3">
               <BrandMark />
             </SheetTitle>
@@ -231,7 +265,10 @@ export function AppShell({ projectId, projectTitle, children }: { projectId?: st
               </div>
             )}
             <div className="mt-6 border-t border-sidebar-border pt-3">
-              <button onClick={signOut} className="tap flex w-full items-center gap-2 rounded-md px-3 text-sm text-muted-foreground">
+              <button
+                onClick={signOut}
+                className="tap flex w-full items-center gap-2 rounded-md px-3 text-sm text-muted-foreground"
+              >
                 <LogOut className="size-4" /> {t("signOut")}
               </button>
             </div>
@@ -267,7 +304,7 @@ export function AppShell({ projectId, projectTitle, children }: { projectId?: st
                   )}
                 >
                   {(() => {
-                    const Icon = WORLD_ICON[w.id];
+                    const Icon = WORLD_ICON[w.id]!;
                     return <Icon className="size-5" />;
                   })()}
                   <span className="truncate">{tx(w.short)}</span>
@@ -277,9 +314,24 @@ export function AppShell({ projectId, projectTitle, children }: { projectId?: st
           </>
         ) : (
           <>
-            <BottomTab to="/projects" icon={LibraryBig} label={t("library")} active={pathname === "/projects"} />
-            <BottomTab to="/projects/new" icon={Plus} label={t("newFilm")} active={pathname === "/projects/new"} />
-            <BottomTab to="/account" icon={UserRound} label={t("account")} active={pathname === "/account"} />
+            <BottomTab
+              to="/projects"
+              icon={LibraryBig}
+              label={t("library")}
+              active={pathname === "/projects"}
+            />
+            <BottomTab
+              to="/projects/new"
+              icon={Plus}
+              label={t("newFilm")}
+              active={pathname === "/projects/new"}
+            />
+            <BottomTab
+              to="/account"
+              icon={UserRound}
+              label={t("account")}
+              active={pathname === "/account"}
+            />
           </>
         )}
       </nav>
@@ -287,11 +339,24 @@ export function AppShell({ projectId, projectTitle, children }: { projectId?: st
   );
 }
 
-function BottomTab({ to, icon: Icon, label, active }: { to: "/projects" | "/projects/new" | "/account"; icon: typeof PenLine; label: string; active: boolean }) {
+function BottomTab({
+  to,
+  icon: Icon,
+  label,
+  active,
+}: {
+  to: "/projects" | "/projects/new" | "/account";
+  icon: typeof PenLine;
+  label: string;
+  active: boolean;
+}) {
   return (
     <Link
       to={to}
-      className={cn("flex min-h-14 flex-col items-center justify-center gap-0.5 text-[11px]", active ? "text-champagne" : "text-muted-foreground")}
+      className={cn(
+        "flex min-h-14 flex-col items-center justify-center gap-0.5 text-[11px]",
+        active ? "text-champagne" : "text-muted-foreground",
+      )}
     >
       <Icon className="size-5" />
       <span className="truncate">{label}</span>
@@ -310,7 +375,11 @@ export function WorldChips({ projectId }: { projectId: string }) {
   return (
     <div className="border-b border-border">
       <div className="flex items-center gap-2 overflow-x-auto px-4 py-2 md:px-8">
-        {w && <span className="eyebrow shrink-0 pe-2">{w.n} · {tx(w.label)}</span>}
+        {w && (
+          <span className="eyebrow shrink-0 pe-2">
+            {w.n} · {tx(w.label)}
+          </span>
+        )}
         {pages.map((p) => {
           const href = `/projects/${projectId}/${p.seg}`;
           const active = pathname === href || pathname.startsWith(href + "/");
@@ -321,7 +390,9 @@ export function WorldChips({ projectId }: { projectId: string }) {
               params={{ id: projectId }}
               className={cn(
                 "tap inline-flex shrink-0 items-center gap-2 rounded-full border px-4 text-xs",
-                active ? "border-champagne/50 bg-champagne-dim text-champagne" : "border-border text-muted-foreground hover:text-foreground",
+                active
+                  ? "border-champagne/50 bg-champagne-dim text-champagne"
+                  : "border-border text-muted-foreground hover:text-foreground",
               )}
             >
               <StatusDot status={p.status} />

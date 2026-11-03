@@ -5,9 +5,15 @@ export const Route = createFileRoute("/rights")({
   head: () => ({
     meta: [
       { title: "Rights & likeness · FRAME ZERO كادر صفر" },
-      { name: "description", content: "FRAME ZERO's rules on likeness, voice, references and original work." },
+      {
+        name: "description",
+        content: "FRAME ZERO's rules on likeness, voice, references and original work.",
+      },
       { property: "og:title", content: "Rights & likeness · FRAME ZERO" },
-      { property: "og:description", content: "Fictional characters, written consent, and original constraints from references." },
+      {
+        property: "og:description",
+        content: "Fictional characters, written consent, and original constraints from references.",
+      },
       { property: "og:type", content: "article" },
       { name: "twitter:card", content: "summary" },
     ],

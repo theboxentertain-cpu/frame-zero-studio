@@ -19,7 +19,12 @@ export class ConflictError extends Error {
   }
 }
 
-export function rowsQuery(table: TableName, projectId: string, filter: Record<string, string> = {}, orderBy = "created_at") {
+export function rowsQuery(
+  table: TableName,
+  projectId: string,
+  filter: Record<string, string> = {},
+  orderBy = "created_at",
+) {
   return queryOptions({
     queryKey: [table, projectId, filter, orderBy],
     queryFn: async (): Promise<AnyRow[]> => {
@@ -39,8 +44,19 @@ export async function insertRow(table: TableName, values: Record<string, unknown
 }
 
 /** Optimistic-lock update: succeeds only if the stored version still matches. */
-export async function updateRow(table: TableName, id: string, version: number, patch: Record<string, unknown>) {
-  const { data, error } = await db.from(table).update(patch).eq("id", id).eq("version", version).select().maybeSingle();
+export async function updateRow(
+  table: TableName,
+  id: string,
+  version: number,
+  patch: Record<string, unknown>,
+) {
+  const { data, error } = await db
+    .from(table)
+    .update(patch)
+    .eq("id", id)
+    .eq("version", version)
+    .select()
+    .maybeSingle();
   if (error) throw error;
   if (!data) throw new ConflictError();
   return data as AnyRow;
@@ -66,9 +82,14 @@ export function useRowMutation(table: TableName, projectId: string) {
     qc.invalidateQueries({ queryKey: ["history", projectId] });
   };
   return {
-    create: useMutation({ mutationFn: (v: Record<string, unknown>) => insertRow(table, { project_id: projectId, ...v }), onSuccess: onDone }),
+    refresh: () => invalidate(table, projectId),
+    create: useMutation({
+      mutationFn: (v: Record<string, unknown>) => insertRow(table, { project_id: projectId, ...v }),
+      onSuccess: onDone,
+    }),
     update: useMutation({
-      mutationFn: (a: { id: string; version: number; patch: Record<string, unknown> }) => updateRow(table, a.id, a.version, a.patch),
+      mutationFn: (a: { id: string; version: number; patch: Record<string, unknown> }) =>
+        updateRow(table, a.id, a.version, a.patch),
       onSuccess: onDone,
     }),
     remove: useMutation({ mutationFn: (id: string) => deleteRow(table, id), onSuccess: onDone }),
@@ -77,7 +98,8 @@ export function useRowMutation(table: TableName, projectId: string) {
 
 export function errorMessage(e: unknown): string {
   if (e instanceof ConflictError) return "version_conflict";
-  if (e && typeof e === "object" && "message" in e) return String((e as { message: unknown }).message);
+  if (e && typeof e === "object" && "message" in e)
+    return String((e as { message: unknown }).message);
   return String(e);
 }
 
@@ -86,7 +108,11 @@ export const projectQuery = (id: string) =>
   queryOptions({
     queryKey: ["project", id],
     queryFn: async () => {
-      const { data, error } = await supabase.from("projects").select("*").eq("id", id).maybeSingle();
+      const { data, error } = await supabase
+        .from("projects")
+        .select("*")
+        .eq("id", id)
+        .maybeSingle();
       if (error) throw error;
       return data;
     },
@@ -96,7 +122,11 @@ export const briefQuery = (projectId: string) =>
   queryOptions({
     queryKey: ["briefs", projectId, "single"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("briefs").select("*").eq("project_id", projectId).maybeSingle();
+      const { data, error } = await supabase
+        .from("briefs")
+        .select("*")
+        .eq("project_id", projectId)
+        .maybeSingle();
       if (error) throw error;
       return data;
     },
@@ -131,9 +161,9 @@ export function missingFields(row: Record<string, unknown>, keys: readonly strin
   return keys.filter((k) => {
     const v = row[k];
     if (v === null || v === undefined) return true;
-    if (typeof v === "number") return !(v > 0);
+    if (typeof v === "number") return !Number.isFinite(v) || !(v > 0);
     if (typeof v === "string") {
-      if (k === "duration_sec") return !(Number(v) > 0);
+      if (k === "duration_sec") return !Number.isFinite(Number(v)) || !(Number(v) > 0);
       return v.trim() === "";
     }
     return false;

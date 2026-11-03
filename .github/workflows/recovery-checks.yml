@@ -1,0 +1,24 @@
+name: Recovery checks
+on:
+  pull_request:
+  push:
+    branches: [recovery/cloud-foundation]
+permissions:
+  contents: read
+jobs:
+  foundation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:browser
+        env:
+          VITE_SUPABASE_URL: https://fixture.example.test
+          VITE_SUPABASE_PUBLISHABLE_KEY: fixture-public-key-not-a-secret
+      - run: npm audit --omit=dev --audit-level=high

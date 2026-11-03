@@ -5,9 +5,15 @@ export const Route = createFileRoute("/privacy")({
   head: () => ({
     meta: [
       { title: "Privacy · FRAME ZERO كادر صفر" },
-      { name: "description", content: "How FRAME ZERO keeps your film projects private to your account." },
+      {
+        name: "description",
+        content: "How FRAME ZERO keeps your film projects private to your account.",
+      },
       { property: "og:title", content: "Privacy · FRAME ZERO" },
-      { property: "og:description", content: "Owner-only access to every project, record and file." },
+      {
+        property: "og:description",
+        content: "Owner-only access to every project, record and file.",
+      },
       { property: "og:type", content: "article" },
       { name: "twitter:card", content: "summary" },
     ],
