@@ -180,7 +180,8 @@ export const PAGES: PageDef[] = [
     status: "partial",
     label: { en: "Visual Storyboard", ar: "اللوحة المصورة" },
     summary: {
-      en: "Manual image references and shot review. AI generation not connected.",
+      en:
+        "Manual image references and shot review. AI generation not connected.",
       ar: "مراجع صور يدوية مع مراجعة اللقطات. توليد الصور غير متصل.",
     },
   },
