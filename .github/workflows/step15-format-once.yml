@@ -1,7 +1,6 @@
 name: Step 15 format-once
 on:
-  push:
-    branches: [feature/step15-still-studio]
+  workflow_dispatch:
 permissions:
   contents: write
 jobs:
