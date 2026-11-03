@@ -32,3 +32,21 @@ BEGIN
 END $$;
 REVOKE ALL ON FUNCTION public.fz_save_storyboard(uuid,integer,jsonb) FROM PUBLIC,anon;
 GRANT EXECUTE ON FUNCTION public.fz_save_storyboard(uuid,integer,jsonb) TO authenticated;
+
+-- Reject spoofed scene/shot links even when both records belong to the same owner.
+CREATE OR REPLACE FUNCTION public.fz_storyboard_validate_source()
+RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER SET search_path=public AS $$
+DECLARE sh public.shots; sc public.scenes;
+BEGIN
+ SELECT * INTO sh FROM public.shots WHERE id=NEW.shot_id AND project_id=NEW.project_id AND archived_at IS NULL;
+ SELECT * INTO sc FROM public.scenes WHERE id=NEW.scene_id AND project_id=NEW.project_id AND archived_at IS NULL;
+ IF sh.id IS NULL OR sc.id IS NULL OR sh.scene_id<>sc.id
+    OR sh.version<>NEW.source_shot_version OR sc.version<>NEW.source_scene_version
+    OR sh.owner_id<>NEW.owner_id THEN
+   RAISE EXCEPTION 'invalid_storyboard_source';
+ END IF;
+ RETURN NEW;
+END $$;
+REVOKE ALL ON FUNCTION public.fz_storyboard_validate_source() FROM PUBLIC,anon,authenticated;
+CREATE TRIGGER storyboard_source BEFORE INSERT ON public.storyboard_frames
+ FOR EACH ROW EXECUTE FUNCTION public.fz_storyboard_validate_source();
