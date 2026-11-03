@@ -1,0 +1,28 @@
+name: Step15 lint diagnosis
+on:
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  file-lint:
+    if: github.event.pull_request.head.ref == 'feature/step15-still-studio'
+    name: Lint ${{ matrix.file }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        file:
+          - src/features/stills/data.ts
+          - src/features/stills/StillStudio.tsx
+          - src/features/ProjectEditors.tsx
+          - src/lib/pages.ts
+          - tests/storyboard.test.mjs
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npx eslint "${{ matrix.file }}"
