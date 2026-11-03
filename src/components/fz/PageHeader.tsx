@@ -4,7 +4,15 @@ import { useI18n } from "@/lib/i18n";
 import { pageById, STATUS_LABEL } from "@/lib/pages";
 import { useSession } from "@/lib/session";
 
-export function PageHeader({ pageId, children, sub }: { pageId: string; children?: ReactNode; sub?: ReactNode }) {
+export function PageHeader({
+  pageId,
+  children,
+  sub,
+}: {
+  pageId: string;
+  children?: ReactNode;
+  sub?: ReactNode;
+}) {
   const { tx } = useI18n();
   const p = pageById(pageId);
   return (
@@ -14,7 +22,9 @@ export function PageHeader({ pageId, children, sub }: { pageId: string; children
           <span className="font-mono text-[11px] text-muted-foreground">{p.id}</span>
           <Badge variant={p.status}>{tx(STATUS_LABEL[p.status])}</Badge>
         </div>
-        <h1 className="mt-2 font-display text-3xl leading-tight text-ivory md:text-5xl">{tx(p.label)}</h1>
+        <h1 className="mt-2 font-display text-3xl leading-tight text-ivory md:text-5xl">
+          {tx(p.label)}
+        </h1>
         <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{sub ?? tx(p.summary)}</p>
       </div>
       {children && <div className="flex flex-wrap gap-2">{children}</div>}
@@ -33,7 +43,15 @@ export function Guidance({ children }: { children: ReactNode }) {
   );
 }
 
-export function Section({ title, children, aside }: { title: string; children: ReactNode; aside?: ReactNode }) {
+export function Section({
+  title,
+  children,
+  aside,
+}: {
+  title: string;
+  children: ReactNode;
+  aside?: ReactNode;
+}) {
   return (
     <section className="px-4 py-4 md:px-8">
       <div className="mb-3 flex items-center justify-between gap-3">
@@ -45,7 +63,15 @@ export function Section({ title, children, aside }: { title: string; children: R
   );
 }
 
-export function EmptyState({ title, body, action }: { title: string; body: string; action?: ReactNode }) {
+export function EmptyState({
+  title,
+  body,
+  action,
+}: {
+  title: string;
+  body: string;
+  action?: ReactNode;
+}) {
   return (
     <div className="frame-corners rounded-md border border-dashed border-border bg-surface/50 px-6 py-10 text-center">
       <p className="font-display text-2xl text-ivory">{title}</p>

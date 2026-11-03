@@ -42,7 +42,10 @@ function ResetPassword() {
     setBusy(true);
     const { error } = await supabase.auth.updateUser({ password });
     setBusy(false);
-    if (error) return toast.error(error.message);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     toast.success(t("saved"));
     navigate({ to: "/projects", replace: true });
   };
@@ -51,15 +54,30 @@ function ResetPassword() {
     <div className="min-h-screen bg-stage px-4 pt-16">
       <div className="mx-auto max-w-md rounded-md border border-border bg-surface p-6">
         <BrandMark />
-        <h1 className="mt-6 font-display text-3xl">{tx({ en: "Set a new password", ar: "اختر كلمة مرور جديدة" })}</h1>
+        <h1 className="mt-6 font-display text-3xl">
+          {tx({ en: "Set a new password", ar: "اختر كلمة مرور جديدة" })}
+        </h1>
         {!recovery ? (
           <p className="mt-3 text-sm text-muted-foreground">
-            {tx({ en: "Open this page from the reset link in your email.", ar: "افتح هذه الصفحة من رابط إعادة التعيين في بريدك." })}
+            {tx({
+              en: "Open this page from the reset link in your email.",
+              ar: "افتح هذه الصفحة من رابط إعادة التعيين في بريدك.",
+            })}
           </p>
         ) : (
           <form onSubmit={submit} className="mt-4 space-y-3">
-            <Input type="password" dir="ltr" minLength={8} required value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="new-password" />
-            <Button className="w-full" disabled={busy}>{busy ? t("saving") : t("save")}</Button>
+            <Input
+              type="password"
+              dir="ltr"
+              minLength={8}
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              autoComplete="new-password"
+            />
+            <Button className="w-full" disabled={busy}>
+              {busy ? t("saving") : t("save")}
+            </Button>
           </form>
         )}
       </div>

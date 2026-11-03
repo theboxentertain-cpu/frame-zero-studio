@@ -3,7 +3,15 @@ import type { ReactNode } from "react";
 import { useI18n, type Bi } from "@/lib/i18n";
 
 /** Honest placeholder for a stage that is part of the roadmap (step 15+), not an operational tool. */
-export function RoadmapPanel({ requires, plan, children }: { requires: Bi; plan: Bi[]; children?: ReactNode }) {
+export function RoadmapPanel({
+  requires,
+  plan,
+  children,
+}: {
+  requires: Bi;
+  plan: Bi[];
+  children?: ReactNode;
+}) {
   const { tx, t } = useI18n();
   return (
     <div className="mx-4 rounded-md border border-roadmap/30 bg-surface/60 p-5 md:mx-8">
@@ -15,7 +23,9 @@ export function RoadmapPanel({ requires, plan, children }: { requires: Bi; plan:
       <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
         {plan.map((p, i) => (
           <li key={i} className="flex gap-2">
-            <span className="font-mono text-[11px] text-roadmap">{String(i + 1).padStart(2, "0")}</span>
+            <span className="font-mono text-[11px] text-roadmap">
+              {String(i + 1).padStart(2, "0")}
+            </span>
             <span>{tx(p)}</span>
           </li>
         ))}

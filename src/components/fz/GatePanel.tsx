@@ -19,15 +19,38 @@ export const GATE_LABEL: Record<GateRow["gate"], Bi> = {
 };
 
 export const MISSING_LABEL: Record<string, Bi> = {
-  brief_approved_decisions: { en: "Write approved decisions in the Creative Brief", ar: "اكتب القرارات المعتمدة في الموجز الإبداعي" },
-  brief_revision_saved: { en: "Save at least one brief revision", ar: "احفظ نسخة واحدة على الأقل من الموجز" },
-  film_treatment_in_review: { en: "A film-level treatment with summary, set to “In review”", ar: "معالجة على مستوى الفيلم بملخص وحالة «قيد المراجعة»" },
+  brief_approved_decisions: {
+    en: "Write approved decisions in the Creative Brief",
+    ar: "اكتب القرارات المعتمدة في الموجز الإبداعي",
+  },
+  brief_revision_saved: {
+    en: "Save at least one brief revision",
+    ar: "احفظ نسخة واحدة على الأقل من الموجز",
+  },
+  film_treatment_in_review: {
+    en: "A film-level treatment with summary, set to “In review”",
+    ar: "معالجة على مستوى الفيلم بملخص وحالة «قيد المراجعة»",
+  },
   locked_location: { en: "Lock at least one world bible", ar: "اقفل مرجع عالم واحدًا على الأقل" },
   locked_character: { en: "Lock at least one cast profile", ar: "اقفل ملف شخصية واحدًا على الأقل" },
-  character_rights_unresolved: { en: "Resolve likeness permission on locked characters", ar: "احسم إذن الملامح للشخصيات المقفلة" },
+  character_rights_unresolved: {
+    en: "Resolve likeness permission on locked characters",
+    ar: "احسم إذن الملامح للشخصيات المقفلة",
+  },
   treatment_approved: { en: "Approve the treatment gate first", ar: "اعتمد بوابة المعالجة أولًا" },
   at_least_one_shot: { en: "Plan at least one shot", ar: "خطط لقطة واحدة على الأقل" },
-  all_shot_fields_complete: { en: "Complete every required field on every shot", ar: "أكمل كل الحقول الإلزامية في كل لقطة" },
+  all_shot_fields_complete: {
+    en: "Complete every required field on every shot",
+    ar: "أكمل كل الحقول الإلزامية في كل لقطة",
+  },
+  treatment_source_changed: {
+    en: "Review treatments against the latest brief revision",
+    ar: "راجع المعالجات على أحدث نسخة للموجز",
+  },
+  shot_source_changed: {
+    en: "Review shots against current active scenes",
+    ar: "راجع اللقطات على المشاهد الحالية غير المؤرشفة",
+  },
   generation_not_connected: {
     en: "Requires image/motion generation — not connected (roadmap step 15+)",
     ar: "يتطلب توليد الصور/الحركة — غير متصل (المرحلة 15+)",
@@ -56,7 +79,11 @@ function GateCard({ g, projectId, label }: { g: GateRow; projectId: string; labe
   const operational = !g.missing.includes("generation_not_connected");
   const approve = useMutation({
     mutationFn: async () => {
-      const { error } = await supabase.rpc("fz_approve_gate", { _project_id: projectId, _gate: g.gate, _note: note });
+      const { error } = await supabase.rpc("fz_approve_gate", {
+        _project_id: projectId,
+        _gate: g.gate,
+        _note: note,
+      });
       if (error) throw error;
     },
     onSuccess: () => {
@@ -69,24 +96,55 @@ function GateCard({ g, projectId, label }: { g: GateRow; projectId: string; labe
   });
   const revoke = useMutation({
     mutationFn: async () => {
-      const { error } = await supabase.rpc("fz_revoke_gate", { _project_id: projectId, _gate: g.gate });
+      const { error } = await supabase.rpc("fz_revoke_gate", {
+        _project_id: projectId,
+        _gate: g.gate,
+      });
       if (error) throw error;
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ["gates", projectId] }),
     onError: (e) => toast.error(errorMessage(e)),
   });
 
-  const state = !operational ? "locked" : g.approved ? (g.stale ? "stale" : "approved") : g.ready ? "ready" : "blocked";
+  const state = !operational
+    ? "locked"
+    : g.approved
+      ? g.stale
+        ? "stale"
+        : "approved"
+      : g.ready
+        ? "ready"
+        : "blocked";
 
   return (
     <div className="shadow-frame rounded-md border border-border bg-surface p-4">
       <div className="flex items-center justify-between gap-2">
         <span className="font-display text-xl">{label}</span>
-        {state === "approved" && <Badge variant="live"><CheckCircle2 className="size-3" />{tx({ en: "Approved (written)", ar: "معتمد (مكتوب)" })}</Badge>}
-        {state === "stale" && <Badge variant="partial"><AlertTriangle className="size-3" />{tx({ en: "Changed since approval", ar: "تغيّر بعد الاعتماد" })}</Badge>}
+        {state === "approved" && (
+          <Badge variant="live">
+            <CheckCircle2 className="size-3" />
+            {tx({ en: "Approved (written)", ar: "معتمد (مكتوب)" })}
+          </Badge>
+        )}
+        {state === "stale" && (
+          <Badge variant="partial">
+            <AlertTriangle className="size-3" />
+            {tx({ en: "Changed since approval", ar: "تغيّر بعد الاعتماد" })}
+          </Badge>
+        )}
         {state === "ready" && <Badge variant="champagne">{tx({ en: "READY", ar: "جاهز" })}</Badge>}
-        {state === "blocked" && <Badge variant="muted"><CircleDashed className="size-3" />{tx({ en: "Not ready", ar: "غير جاهز" })}</Badge>}
-        {state === "locked" && <Badge variant="roadmap"><Lock className="size-3" />{tx({ en: "Roadmap", ar: "خارطة الطريق" })}</Badge>}
+        {state === "blocked" && (
+          <Badge variant="muted">
+            <CircleDashed className="size-3" />
+            {tx({ en: "Not ready", ar: "غير جاهز" })}
+          </Badge>
+        )}
+        {state === "locked" && (
+          <Badge variant="roadmap">
+            <Lock className="size-3" />
+            {tx({ en: "Roadmap", ar: "خارطة الطريق" })}
+          </Badge>
+        )}
       </div>
       {g.missing.length > 0 && (
         <ul className="mt-3 space-y-1 text-xs text-muted-foreground">
@@ -96,7 +154,9 @@ function GateCard({ g, projectId, label }: { g: GateRow; projectId: string; labe
         </ul>
       )}
       {g.approved && g.approved_at && (
-        <p className="mt-2 text-xs text-muted-foreground">{new Date(g.approved_at).toLocaleString()}</p>
+        <p className="mt-2 text-xs text-muted-foreground">
+          {new Date(g.approved_at).toLocaleString()}
+        </p>
       )}
       {operational && (
         <div className="mt-3 flex flex-col gap-2">
@@ -108,11 +168,23 @@ function GateCard({ g, projectId, label }: { g: GateRow; projectId: string; labe
             />
           )}
           <div className="flex gap-2">
-            <Button size="sm" variant="frame" disabled={!g.ready || approve.isPending} onClick={() => approve.mutate()}>
-              {g.approved ? tx({ en: "Re-approve", ar: "إعادة الاعتماد" }) : tx({ en: "Approve in writing", ar: "اعتماد كتابي" })}
+            <Button
+              size="sm"
+              variant="frame"
+              disabled={!g.ready || approve.isPending}
+              onClick={() => approve.mutate()}
+            >
+              {g.approved
+                ? tx({ en: "Re-approve", ar: "إعادة الاعتماد" })
+                : tx({ en: "Approve in writing", ar: "اعتماد كتابي" })}
             </Button>
             {g.approved && (
-              <Button size="sm" variant="ghost" disabled={revoke.isPending} onClick={() => revoke.mutate()}>
+              <Button
+                size="sm"
+                variant="ghost"
+                disabled={revoke.isPending}
+                onClick={() => revoke.mutate()}
+              >
                 {tx({ en: "Revoke", ar: "سحب" })}
               </Button>
             )}

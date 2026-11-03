@@ -1,0 +1,9 @@
+# Recover FRAME ZERO application routes, manual editors and private-data safeguards
+
+The Lovable foundation declared P00–P23 but had no authenticated application pages, so project navigation could not complete the written filmmaking journey. This change adds the missing routes and connects the existing bilingual shell, record editor, Supabase schema and written approval gates to real project/brief/treatment/cast/world/dialogue/performance/shot editing. CREATE, CAST & WORLD, DIRECT, FINISH and Storyteller/Filmmaker/Director remain intact. Media/AI stages stay explicitly unavailable.
+
+Private query caches now clear on identity changes, dirty drafts retain their original optimistic-lock version, and language switching waits for hydration. Additive SQL hardens brief revision assignment and invalidates approval prerequisites when source material changes. Vite and Zod are updated, both lockfiles are refreshed, and tracked local environment configuration is replaced with a placeholder example. Existing data, snapshots and migration history are preserved.
+
+Validation: clean npm install, strict typecheck, lint (13 fast-refresh warnings, no errors), 28 application tests, six isolated PostgreSQL/RLS tests, two Chromium browser checks and production build passed. Production dependency audit reports zero known findings; full development toolchain audit retains 18 moderate findings.
+
+Review [feature audit](RECOVERY_AUDIT.md) and [security findings](SECURITY_FINDINGS.md). Browser tests use an isolated API fixture; SQL tests use isolated PostgreSQL with synthetic Auth/storage schemas. The network proxy blocks the configured production Lovable backend and GitHub API. No production migrations, writes, environment publication or live Auth/RLS certification occurred. Migration 0002 requires staging review/application. Original local Step 14 algorithms/assets are absent and parity cannot be claimed. Step 15 remains blocked.

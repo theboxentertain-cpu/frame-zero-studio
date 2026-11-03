@@ -10,33 +10,421 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as RightsRouteImport } from './routes/rights'
+import { Route as AuthenticatedAccountRouteImport } from './routes/_authenticated/account'
+import { Route as AuthenticatedProjectsIndexRouteImport } from './routes/_authenticated/projects/index'
+import { Route as AuthenticatedProjectsNewRouteImport } from './routes/_authenticated/projects/new'
+import { Route as AuthenticatedProjectsIdIndexRouteImport } from './routes/_authenticated/projects/$id/index'
+import { Route as AuthenticatedProjectsIdBriefRouteImport } from './routes/_authenticated/projects/$id/brief'
+import { Route as AuthenticatedProjectsIdBudgetRouteImport } from './routes/_authenticated/projects/$id/budget'
+import { Route as AuthenticatedProjectsIdCastRouteImport } from './routes/_authenticated/projects/$id/cast'
+import { Route as AuthenticatedProjectsIdContinuityRouteImport } from './routes/_authenticated/projects/$id/continuity'
+import { Route as AuthenticatedProjectsIdEditRouteImport } from './routes/_authenticated/projects/$id/edit'
+import { Route as AuthenticatedProjectsIdExportRouteImport } from './routes/_authenticated/projects/$id/export'
+import { Route as AuthenticatedProjectsIdGradeRouteImport } from './routes/_authenticated/projects/$id/grade'
+import { Route as AuthenticatedProjectsIdInterpretationsRouteImport } from './routes/_authenticated/projects/$id/interpretations'
+import { Route as AuthenticatedProjectsIdLanguageRouteImport } from './routes/_authenticated/projects/$id/language'
+import { Route as AuthenticatedProjectsIdLocationsRouteImport } from './routes/_authenticated/projects/$id/locations'
+import { Route as AuthenticatedProjectsIdPerformancesRouteImport } from './routes/_authenticated/projects/$id/performances'
+import { Route as AuthenticatedProjectsIdQualityRouteImport } from './routes/_authenticated/projects/$id/quality'
+import { Route as AuthenticatedProjectsIdSoundRouteImport } from './routes/_authenticated/projects/$id/sound'
+import { Route as AuthenticatedProjectsIdStoryRouteImport } from './routes/_authenticated/projects/$id/story'
+import { Route as AuthenticatedProjectsIdTreatmentRouteImport } from './routes/_authenticated/projects/$id/treatment'
+import { Route as AuthenticatedProjectsIdVersionsRouteImport } from './routes/_authenticated/projects/$id/versions'
+import { Route as AuthenticatedProjectsIdScenesIndexRouteImport } from './routes/_authenticated/projects/$id/scenes/index'
+import { Route as AuthenticatedProjectsIdScenesSidPlanRouteImport } from './routes/_authenticated/projects/$id/scenes/$sid/plan'
+import { Route as AuthenticatedProjectsIdScenesSidProductionRouteImport } from './routes/_authenticated/projects/$id/scenes/$sid/production'
+import { Route as AuthenticatedProjectsIdScenesSidStillsRouteImport } from './routes/_authenticated/projects/$id/scenes/$sid/stills'
+import { Route as AuthenticatedProjectsIdShotsShotidRetakeRouteImport } from './routes/_authenticated/projects/$id/shots/$shotid/retake'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RightsRoute = RightsRouteImport.update({
+  id: '/rights',
+  path: '/rights',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAccountRoute = AuthenticatedAccountRouteImport.update({
+  id: '/account',
+  path: '/account',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedProjectsIndexRoute =
+  AuthenticatedProjectsIndexRouteImport.update({
+    id: '/projects/',
+    path: '/projects/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedProjectsNewRoute =
+  AuthenticatedProjectsNewRouteImport.update({
+    id: '/projects/new',
+    path: '/projects/new',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedProjectsIdIndexRoute =
+  AuthenticatedProjectsIdIndexRouteImport.update({
+    id: '/projects/$id/',
+    path: '/projects/$id/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedProjectsIdBriefRoute =
+  AuthenticatedProjectsIdBriefRouteImport.update({
+    id: '/projects/$id/brief',
+    path: '/projects/$id/brief',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedProjectsIdBudgetRoute =
+  AuthenticatedProjectsIdBudgetRouteImport.update({
+    id: '/projects/$id/budget',
+    path: '/projects/$id/budget',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedProjectsIdCastRoute =
+  AuthenticatedProjectsIdCastRouteImport.update({
+    id: '/projects/$id/cast',
+    path: '/projects/$id/cast',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedProjectsIdContinuityRoute =
+  AuthenticatedProjectsIdContinuityRouteImport.update({
+    id: '/projects/$id/continuity',
+    path: '/projects/$id/continuity',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedProjectsIdEditRoute =
+  AuthenticatedProjectsIdEditRouteImport.update({
+    id: '/projects/$id/edit',
+    path: '/projects/$id/edit',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedProjectsIdExportRoute =
+  AuthenticatedProjectsIdExportRouteImport.update({
+    id: '/projects/$id/export',
+    path: '/projects/$id/export',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedProjectsIdGradeRoute =
+  AuthenticatedProjectsIdGradeRouteImport.update({
+    id: '/projects/$id/grade',
+    path: '/projects/$id/grade',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedProjectsIdInterpretationsRoute =
+  AuthenticatedProjectsIdInterpretationsRouteImport.update({
+    id: '/projects/$id/interpretations',
+    path: '/projects/$id/interpretations',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedProjectsIdLanguageRoute =
+  AuthenticatedProjectsIdLanguageRouteImport.update({
+    id: '/projects/$id/language',
+    path: '/projects/$id/language',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedProjectsIdLocationsRoute =
+  AuthenticatedProjectsIdLocationsRouteImport.update({
+    id: '/projects/$id/locations',
+    path: '/projects/$id/locations',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedProjectsIdPerformancesRoute =
+  AuthenticatedProjectsIdPerformancesRouteImport.update({
+    id: '/projects/$id/performances',
+    path: '/projects/$id/performances',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedProjectsIdQualityRoute =
+  AuthenticatedProjectsIdQualityRouteImport.update({
+    id: '/projects/$id/quality',
+    path: '/projects/$id/quality',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedProjectsIdSoundRoute =
+  AuthenticatedProjectsIdSoundRouteImport.update({
+    id: '/projects/$id/sound',
+    path: '/projects/$id/sound',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedProjectsIdStoryRoute =
+  AuthenticatedProjectsIdStoryRouteImport.update({
+    id: '/projects/$id/story',
+    path: '/projects/$id/story',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedProjectsIdTreatmentRoute =
+  AuthenticatedProjectsIdTreatmentRouteImport.update({
+    id: '/projects/$id/treatment',
+    path: '/projects/$id/treatment',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedProjectsIdVersionsRoute =
+  AuthenticatedProjectsIdVersionsRouteImport.update({
+    id: '/projects/$id/versions',
+    path: '/projects/$id/versions',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedProjectsIdScenesIndexRoute =
+  AuthenticatedProjectsIdScenesIndexRouteImport.update({
+    id: '/projects/$id/scenes/',
+    path: '/projects/$id/scenes/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedProjectsIdScenesSidPlanRoute =
+  AuthenticatedProjectsIdScenesSidPlanRouteImport.update({
+    id: '/projects/$id/scenes/$sid/plan',
+    path: '/projects/$id/scenes/$sid/plan',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedProjectsIdScenesSidProductionRoute =
+  AuthenticatedProjectsIdScenesSidProductionRouteImport.update({
+    id: '/projects/$id/scenes/$sid/production',
+    path: '/projects/$id/scenes/$sid/production',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedProjectsIdScenesSidStillsRoute =
+  AuthenticatedProjectsIdScenesSidStillsRouteImport.update({
+    id: '/projects/$id/scenes/$sid/stills',
+    path: '/projects/$id/scenes/$sid/stills',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedProjectsIdShotsShotidRetakeRoute =
+  AuthenticatedProjectsIdShotsShotidRetakeRouteImport.update({
+    id: '/projects/$id/shots/$shotid/retake',
+    path: '/projects/$id/shots/$shotid/retake',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/privacy': typeof PrivacyRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/rights': typeof RightsRoute
+  '/account': typeof AuthenticatedAccountRoute
+  '/projects/new': typeof AuthenticatedProjectsNewRoute
+  '/projects/': typeof AuthenticatedProjectsIndexRoute
+  '/projects/$id/brief': typeof AuthenticatedProjectsIdBriefRoute
+  '/projects/$id/budget': typeof AuthenticatedProjectsIdBudgetRoute
+  '/projects/$id/cast': typeof AuthenticatedProjectsIdCastRoute
+  '/projects/$id/continuity': typeof AuthenticatedProjectsIdContinuityRoute
+  '/projects/$id/edit': typeof AuthenticatedProjectsIdEditRoute
+  '/projects/$id/export': typeof AuthenticatedProjectsIdExportRoute
+  '/projects/$id/grade': typeof AuthenticatedProjectsIdGradeRoute
+  '/projects/$id/interpretations': typeof AuthenticatedProjectsIdInterpretationsRoute
+  '/projects/$id/language': typeof AuthenticatedProjectsIdLanguageRoute
+  '/projects/$id/locations': typeof AuthenticatedProjectsIdLocationsRoute
+  '/projects/$id/performances': typeof AuthenticatedProjectsIdPerformancesRoute
+  '/projects/$id/quality': typeof AuthenticatedProjectsIdQualityRoute
+  '/projects/$id/sound': typeof AuthenticatedProjectsIdSoundRoute
+  '/projects/$id/story': typeof AuthenticatedProjectsIdStoryRoute
+  '/projects/$id/treatment': typeof AuthenticatedProjectsIdTreatmentRoute
+  '/projects/$id/versions': typeof AuthenticatedProjectsIdVersionsRoute
+  '/projects/$id/': typeof AuthenticatedProjectsIdIndexRoute
+  '/projects/$id/scenes/': typeof AuthenticatedProjectsIdScenesIndexRoute
+  '/projects/$id/scenes/$sid/plan': typeof AuthenticatedProjectsIdScenesSidPlanRoute
+  '/projects/$id/scenes/$sid/production': typeof AuthenticatedProjectsIdScenesSidProductionRoute
+  '/projects/$id/scenes/$sid/stills': typeof AuthenticatedProjectsIdScenesSidStillsRoute
+  '/projects/$id/shots/$shotid/retake': typeof AuthenticatedProjectsIdShotsShotidRetakeRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/privacy': typeof PrivacyRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/rights': typeof RightsRoute
+  '/account': typeof AuthenticatedAccountRoute
+  '/projects/new': typeof AuthenticatedProjectsNewRoute
+  '/projects': typeof AuthenticatedProjectsIndexRoute
+  '/projects/$id/brief': typeof AuthenticatedProjectsIdBriefRoute
+  '/projects/$id/budget': typeof AuthenticatedProjectsIdBudgetRoute
+  '/projects/$id/cast': typeof AuthenticatedProjectsIdCastRoute
+  '/projects/$id/continuity': typeof AuthenticatedProjectsIdContinuityRoute
+  '/projects/$id/edit': typeof AuthenticatedProjectsIdEditRoute
+  '/projects/$id/export': typeof AuthenticatedProjectsIdExportRoute
+  '/projects/$id/grade': typeof AuthenticatedProjectsIdGradeRoute
+  '/projects/$id/interpretations': typeof AuthenticatedProjectsIdInterpretationsRoute
+  '/projects/$id/language': typeof AuthenticatedProjectsIdLanguageRoute
+  '/projects/$id/locations': typeof AuthenticatedProjectsIdLocationsRoute
+  '/projects/$id/performances': typeof AuthenticatedProjectsIdPerformancesRoute
+  '/projects/$id/quality': typeof AuthenticatedProjectsIdQualityRoute
+  '/projects/$id/sound': typeof AuthenticatedProjectsIdSoundRoute
+  '/projects/$id/story': typeof AuthenticatedProjectsIdStoryRoute
+  '/projects/$id/treatment': typeof AuthenticatedProjectsIdTreatmentRoute
+  '/projects/$id/versions': typeof AuthenticatedProjectsIdVersionsRoute
+  '/projects/$id': typeof AuthenticatedProjectsIdIndexRoute
+  '/projects/$id/scenes': typeof AuthenticatedProjectsIdScenesIndexRoute
+  '/projects/$id/scenes/$sid/plan': typeof AuthenticatedProjectsIdScenesSidPlanRoute
+  '/projects/$id/scenes/$sid/production': typeof AuthenticatedProjectsIdScenesSidProductionRoute
+  '/projects/$id/scenes/$sid/stills': typeof AuthenticatedProjectsIdScenesSidStillsRoute
+  '/projects/$id/shots/$shotid/retake': typeof AuthenticatedProjectsIdShotsShotidRetakeRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/privacy': typeof PrivacyRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/rights': typeof RightsRoute
+  '/_authenticated/account': typeof AuthenticatedAccountRoute
+  '/_authenticated/projects/new': typeof AuthenticatedProjectsNewRoute
+  '/_authenticated/projects/': typeof AuthenticatedProjectsIndexRoute
+  '/_authenticated/projects/$id/brief': typeof AuthenticatedProjectsIdBriefRoute
+  '/_authenticated/projects/$id/budget': typeof AuthenticatedProjectsIdBudgetRoute
+  '/_authenticated/projects/$id/cast': typeof AuthenticatedProjectsIdCastRoute
+  '/_authenticated/projects/$id/continuity': typeof AuthenticatedProjectsIdContinuityRoute
+  '/_authenticated/projects/$id/edit': typeof AuthenticatedProjectsIdEditRoute
+  '/_authenticated/projects/$id/export': typeof AuthenticatedProjectsIdExportRoute
+  '/_authenticated/projects/$id/grade': typeof AuthenticatedProjectsIdGradeRoute
+  '/_authenticated/projects/$id/interpretations': typeof AuthenticatedProjectsIdInterpretationsRoute
+  '/_authenticated/projects/$id/language': typeof AuthenticatedProjectsIdLanguageRoute
+  '/_authenticated/projects/$id/locations': typeof AuthenticatedProjectsIdLocationsRoute
+  '/_authenticated/projects/$id/performances': typeof AuthenticatedProjectsIdPerformancesRoute
+  '/_authenticated/projects/$id/quality': typeof AuthenticatedProjectsIdQualityRoute
+  '/_authenticated/projects/$id/sound': typeof AuthenticatedProjectsIdSoundRoute
+  '/_authenticated/projects/$id/story': typeof AuthenticatedProjectsIdStoryRoute
+  '/_authenticated/projects/$id/treatment': typeof AuthenticatedProjectsIdTreatmentRoute
+  '/_authenticated/projects/$id/versions': typeof AuthenticatedProjectsIdVersionsRoute
+  '/_authenticated/projects/$id/': typeof AuthenticatedProjectsIdIndexRoute
+  '/_authenticated/projects/$id/scenes/': typeof AuthenticatedProjectsIdScenesIndexRoute
+  '/_authenticated/projects/$id/scenes/$sid/plan': typeof AuthenticatedProjectsIdScenesSidPlanRoute
+  '/_authenticated/projects/$id/scenes/$sid/production': typeof AuthenticatedProjectsIdScenesSidProductionRoute
+  '/_authenticated/projects/$id/scenes/$sid/stills': typeof AuthenticatedProjectsIdScenesSidStillsRoute
+  '/_authenticated/projects/$id/shots/$shotid/retake': typeof AuthenticatedProjectsIdShotsShotidRetakeRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/privacy'
+    | '/reset-password'
+    | '/rights'
+    | '/account'
+    | '/projects/new'
+    | '/projects/'
+    | '/projects/$id/brief'
+    | '/projects/$id/budget'
+    | '/projects/$id/cast'
+    | '/projects/$id/continuity'
+    | '/projects/$id/edit'
+    | '/projects/$id/export'
+    | '/projects/$id/grade'
+    | '/projects/$id/interpretations'
+    | '/projects/$id/language'
+    | '/projects/$id/locations'
+    | '/projects/$id/performances'
+    | '/projects/$id/quality'
+    | '/projects/$id/sound'
+    | '/projects/$id/story'
+    | '/projects/$id/treatment'
+    | '/projects/$id/versions'
+    | '/projects/$id/'
+    | '/projects/$id/scenes/'
+    | '/projects/$id/scenes/$sid/plan'
+    | '/projects/$id/scenes/$sid/production'
+    | '/projects/$id/scenes/$sid/stills'
+    | '/projects/$id/shots/$shotid/retake'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/auth'
+    | '/privacy'
+    | '/reset-password'
+    | '/rights'
+    | '/account'
+    | '/projects/new'
+    | '/projects'
+    | '/projects/$id/brief'
+    | '/projects/$id/budget'
+    | '/projects/$id/cast'
+    | '/projects/$id/continuity'
+    | '/projects/$id/edit'
+    | '/projects/$id/export'
+    | '/projects/$id/grade'
+    | '/projects/$id/interpretations'
+    | '/projects/$id/language'
+    | '/projects/$id/locations'
+    | '/projects/$id/performances'
+    | '/projects/$id/quality'
+    | '/projects/$id/sound'
+    | '/projects/$id/story'
+    | '/projects/$id/treatment'
+    | '/projects/$id/versions'
+    | '/projects/$id'
+    | '/projects/$id/scenes'
+    | '/projects/$id/scenes/$sid/plan'
+    | '/projects/$id/scenes/$sid/production'
+    | '/projects/$id/scenes/$sid/stills'
+    | '/projects/$id/shots/$shotid/retake'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/privacy'
+    | '/reset-password'
+    | '/rights'
+    | '/_authenticated/account'
+    | '/_authenticated/projects/new'
+    | '/_authenticated/projects/'
+    | '/_authenticated/projects/$id/brief'
+    | '/_authenticated/projects/$id/budget'
+    | '/_authenticated/projects/$id/cast'
+    | '/_authenticated/projects/$id/continuity'
+    | '/_authenticated/projects/$id/edit'
+    | '/_authenticated/projects/$id/export'
+    | '/_authenticated/projects/$id/grade'
+    | '/_authenticated/projects/$id/interpretations'
+    | '/_authenticated/projects/$id/language'
+    | '/_authenticated/projects/$id/locations'
+    | '/_authenticated/projects/$id/performances'
+    | '/_authenticated/projects/$id/quality'
+    | '/_authenticated/projects/$id/sound'
+    | '/_authenticated/projects/$id/story'
+    | '/_authenticated/projects/$id/treatment'
+    | '/_authenticated/projects/$id/versions'
+    | '/_authenticated/projects/$id/'
+    | '/_authenticated/projects/$id/scenes/'
+    | '/_authenticated/projects/$id/scenes/$sid/plan'
+    | '/_authenticated/projects/$id/scenes/$sid/production'
+    | '/_authenticated/projects/$id/scenes/$sid/stills'
+    | '/_authenticated/projects/$id/shots/$shotid/retake'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
+  PrivacyRoute: typeof PrivacyRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
+  RightsRoute: typeof RightsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +436,293 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rights': {
+      id: '/rights'
+      path: '/rights'
+      fullPath: '/rights'
+      preLoaderRoute: typeof RightsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/account': {
+      id: '/_authenticated/account'
+      path: '/account'
+      fullPath: '/account'
+      preLoaderRoute: typeof AuthenticatedAccountRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/projects/': {
+      id: '/_authenticated/projects/'
+      path: '/projects'
+      fullPath: '/projects/'
+      preLoaderRoute: typeof AuthenticatedProjectsIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/projects/new': {
+      id: '/_authenticated/projects/new'
+      path: '/projects/new'
+      fullPath: '/projects/new'
+      preLoaderRoute: typeof AuthenticatedProjectsNewRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/projects/$id/': {
+      id: '/_authenticated/projects/$id/'
+      path: '/projects/$id'
+      fullPath: '/projects/$id/'
+      preLoaderRoute: typeof AuthenticatedProjectsIdIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/projects/$id/brief': {
+      id: '/_authenticated/projects/$id/brief'
+      path: '/projects/$id/brief'
+      fullPath: '/projects/$id/brief'
+      preLoaderRoute: typeof AuthenticatedProjectsIdBriefRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/projects/$id/budget': {
+      id: '/_authenticated/projects/$id/budget'
+      path: '/projects/$id/budget'
+      fullPath: '/projects/$id/budget'
+      preLoaderRoute: typeof AuthenticatedProjectsIdBudgetRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/projects/$id/cast': {
+      id: '/_authenticated/projects/$id/cast'
+      path: '/projects/$id/cast'
+      fullPath: '/projects/$id/cast'
+      preLoaderRoute: typeof AuthenticatedProjectsIdCastRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/projects/$id/continuity': {
+      id: '/_authenticated/projects/$id/continuity'
+      path: '/projects/$id/continuity'
+      fullPath: '/projects/$id/continuity'
+      preLoaderRoute: typeof AuthenticatedProjectsIdContinuityRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/projects/$id/edit': {
+      id: '/_authenticated/projects/$id/edit'
+      path: '/projects/$id/edit'
+      fullPath: '/projects/$id/edit'
+      preLoaderRoute: typeof AuthenticatedProjectsIdEditRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/projects/$id/export': {
+      id: '/_authenticated/projects/$id/export'
+      path: '/projects/$id/export'
+      fullPath: '/projects/$id/export'
+      preLoaderRoute: typeof AuthenticatedProjectsIdExportRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/projects/$id/grade': {
+      id: '/_authenticated/projects/$id/grade'
+      path: '/projects/$id/grade'
+      fullPath: '/projects/$id/grade'
+      preLoaderRoute: typeof AuthenticatedProjectsIdGradeRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/projects/$id/interpretations': {
+      id: '/_authenticated/projects/$id/interpretations'
+      path: '/projects/$id/interpretations'
+      fullPath: '/projects/$id/interpretations'
+      preLoaderRoute: typeof AuthenticatedProjectsIdInterpretationsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/projects/$id/language': {
+      id: '/_authenticated/projects/$id/language'
+      path: '/projects/$id/language'
+      fullPath: '/projects/$id/language'
+      preLoaderRoute: typeof AuthenticatedProjectsIdLanguageRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/projects/$id/locations': {
+      id: '/_authenticated/projects/$id/locations'
+      path: '/projects/$id/locations'
+      fullPath: '/projects/$id/locations'
+      preLoaderRoute: typeof AuthenticatedProjectsIdLocationsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/projects/$id/performances': {
+      id: '/_authenticated/projects/$id/performances'
+      path: '/projects/$id/performances'
+      fullPath: '/projects/$id/performances'
+      preLoaderRoute: typeof AuthenticatedProjectsIdPerformancesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/projects/$id/quality': {
+      id: '/_authenticated/projects/$id/quality'
+      path: '/projects/$id/quality'
+      fullPath: '/projects/$id/quality'
+      preLoaderRoute: typeof AuthenticatedProjectsIdQualityRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/projects/$id/sound': {
+      id: '/_authenticated/projects/$id/sound'
+      path: '/projects/$id/sound'
+      fullPath: '/projects/$id/sound'
+      preLoaderRoute: typeof AuthenticatedProjectsIdSoundRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/projects/$id/story': {
+      id: '/_authenticated/projects/$id/story'
+      path: '/projects/$id/story'
+      fullPath: '/projects/$id/story'
+      preLoaderRoute: typeof AuthenticatedProjectsIdStoryRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/projects/$id/treatment': {
+      id: '/_authenticated/projects/$id/treatment'
+      path: '/projects/$id/treatment'
+      fullPath: '/projects/$id/treatment'
+      preLoaderRoute: typeof AuthenticatedProjectsIdTreatmentRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/projects/$id/versions': {
+      id: '/_authenticated/projects/$id/versions'
+      path: '/projects/$id/versions'
+      fullPath: '/projects/$id/versions'
+      preLoaderRoute: typeof AuthenticatedProjectsIdVersionsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/projects/$id/scenes/': {
+      id: '/_authenticated/projects/$id/scenes/'
+      path: '/projects/$id/scenes'
+      fullPath: '/projects/$id/scenes/'
+      preLoaderRoute: typeof AuthenticatedProjectsIdScenesIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/projects/$id/scenes/$sid/plan': {
+      id: '/_authenticated/projects/$id/scenes/$sid/plan'
+      path: '/projects/$id/scenes/$sid/plan'
+      fullPath: '/projects/$id/scenes/$sid/plan'
+      preLoaderRoute: typeof AuthenticatedProjectsIdScenesSidPlanRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/projects/$id/scenes/$sid/production': {
+      id: '/_authenticated/projects/$id/scenes/$sid/production'
+      path: '/projects/$id/scenes/$sid/production'
+      fullPath: '/projects/$id/scenes/$sid/production'
+      preLoaderRoute: typeof AuthenticatedProjectsIdScenesSidProductionRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/projects/$id/scenes/$sid/stills': {
+      id: '/_authenticated/projects/$id/scenes/$sid/stills'
+      path: '/projects/$id/scenes/$sid/stills'
+      fullPath: '/projects/$id/scenes/$sid/stills'
+      preLoaderRoute: typeof AuthenticatedProjectsIdScenesSidStillsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/projects/$id/shots/$shotid/retake': {
+      id: '/_authenticated/projects/$id/shots/$shotid/retake'
+      path: '/projects/$id/shots/$shotid/retake'
+      fullPath: '/projects/$id/shots/$shotid/retake'
+      preLoaderRoute: typeof AuthenticatedProjectsIdShotsShotidRetakeRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAccountRoute: typeof AuthenticatedAccountRoute
+  AuthenticatedProjectsNewRoute: typeof AuthenticatedProjectsNewRoute
+  AuthenticatedProjectsIndexRoute: typeof AuthenticatedProjectsIndexRoute
+  AuthenticatedProjectsIdBriefRoute: typeof AuthenticatedProjectsIdBriefRoute
+  AuthenticatedProjectsIdBudgetRoute: typeof AuthenticatedProjectsIdBudgetRoute
+  AuthenticatedProjectsIdCastRoute: typeof AuthenticatedProjectsIdCastRoute
+  AuthenticatedProjectsIdContinuityRoute: typeof AuthenticatedProjectsIdContinuityRoute
+  AuthenticatedProjectsIdEditRoute: typeof AuthenticatedProjectsIdEditRoute
+  AuthenticatedProjectsIdExportRoute: typeof AuthenticatedProjectsIdExportRoute
+  AuthenticatedProjectsIdGradeRoute: typeof AuthenticatedProjectsIdGradeRoute
+  AuthenticatedProjectsIdInterpretationsRoute: typeof AuthenticatedProjectsIdInterpretationsRoute
+  AuthenticatedProjectsIdLanguageRoute: typeof AuthenticatedProjectsIdLanguageRoute
+  AuthenticatedProjectsIdLocationsRoute: typeof AuthenticatedProjectsIdLocationsRoute
+  AuthenticatedProjectsIdPerformancesRoute: typeof AuthenticatedProjectsIdPerformancesRoute
+  AuthenticatedProjectsIdQualityRoute: typeof AuthenticatedProjectsIdQualityRoute
+  AuthenticatedProjectsIdSoundRoute: typeof AuthenticatedProjectsIdSoundRoute
+  AuthenticatedProjectsIdStoryRoute: typeof AuthenticatedProjectsIdStoryRoute
+  AuthenticatedProjectsIdTreatmentRoute: typeof AuthenticatedProjectsIdTreatmentRoute
+  AuthenticatedProjectsIdVersionsRoute: typeof AuthenticatedProjectsIdVersionsRoute
+  AuthenticatedProjectsIdIndexRoute: typeof AuthenticatedProjectsIdIndexRoute
+  AuthenticatedProjectsIdScenesIndexRoute: typeof AuthenticatedProjectsIdScenesIndexRoute
+  AuthenticatedProjectsIdScenesSidPlanRoute: typeof AuthenticatedProjectsIdScenesSidPlanRoute
+  AuthenticatedProjectsIdScenesSidProductionRoute: typeof AuthenticatedProjectsIdScenesSidProductionRoute
+  AuthenticatedProjectsIdScenesSidStillsRoute: typeof AuthenticatedProjectsIdScenesSidStillsRoute
+  AuthenticatedProjectsIdShotsShotidRetakeRoute: typeof AuthenticatedProjectsIdShotsShotidRetakeRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAccountRoute: AuthenticatedAccountRoute,
+  AuthenticatedProjectsNewRoute: AuthenticatedProjectsNewRoute,
+  AuthenticatedProjectsIndexRoute: AuthenticatedProjectsIndexRoute,
+  AuthenticatedProjectsIdBriefRoute: AuthenticatedProjectsIdBriefRoute,
+  AuthenticatedProjectsIdBudgetRoute: AuthenticatedProjectsIdBudgetRoute,
+  AuthenticatedProjectsIdCastRoute: AuthenticatedProjectsIdCastRoute,
+  AuthenticatedProjectsIdContinuityRoute:
+    AuthenticatedProjectsIdContinuityRoute,
+  AuthenticatedProjectsIdEditRoute: AuthenticatedProjectsIdEditRoute,
+  AuthenticatedProjectsIdExportRoute: AuthenticatedProjectsIdExportRoute,
+  AuthenticatedProjectsIdGradeRoute: AuthenticatedProjectsIdGradeRoute,
+  AuthenticatedProjectsIdInterpretationsRoute:
+    AuthenticatedProjectsIdInterpretationsRoute,
+  AuthenticatedProjectsIdLanguageRoute: AuthenticatedProjectsIdLanguageRoute,
+  AuthenticatedProjectsIdLocationsRoute: AuthenticatedProjectsIdLocationsRoute,
+  AuthenticatedProjectsIdPerformancesRoute:
+    AuthenticatedProjectsIdPerformancesRoute,
+  AuthenticatedProjectsIdQualityRoute: AuthenticatedProjectsIdQualityRoute,
+  AuthenticatedProjectsIdSoundRoute: AuthenticatedProjectsIdSoundRoute,
+  AuthenticatedProjectsIdStoryRoute: AuthenticatedProjectsIdStoryRoute,
+  AuthenticatedProjectsIdTreatmentRoute: AuthenticatedProjectsIdTreatmentRoute,
+  AuthenticatedProjectsIdVersionsRoute: AuthenticatedProjectsIdVersionsRoute,
+  AuthenticatedProjectsIdIndexRoute: AuthenticatedProjectsIdIndexRoute,
+  AuthenticatedProjectsIdScenesIndexRoute:
+    AuthenticatedProjectsIdScenesIndexRoute,
+  AuthenticatedProjectsIdScenesSidPlanRoute:
+    AuthenticatedProjectsIdScenesSidPlanRoute,
+  AuthenticatedProjectsIdScenesSidProductionRoute:
+    AuthenticatedProjectsIdScenesSidProductionRoute,
+  AuthenticatedProjectsIdScenesSidStillsRoute:
+    AuthenticatedProjectsIdScenesSidStillsRoute,
+  AuthenticatedProjectsIdShotsShotidRetakeRoute:
+    AuthenticatedProjectsIdShotsShotidRetakeRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
+  PrivacyRoute: PrivacyRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
+  RightsRoute: RightsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

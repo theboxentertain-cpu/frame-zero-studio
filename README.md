@@ -52,6 +52,15 @@ Prefer working locally? You need Node.js and npm — [install with nvm](https://
 ```sh
 git clone <this-repository-url>
 cd <repository-name>
-npm i
+npm ci
+cp .env.example .env # configure the public staging backend values locally
 npm run dev
 ```
+
+## Recovery verification
+
+See [feature audit](docs/RECOVERY_AUDIT.md) and [security findings](docs/SECURITY_FINDINGS.md) before deployment. Original Step 14 FastAPI/SQLite source is not present. Recovered tools are written planning editors; AI/media generation remains unavailable.
+
+Use Node 24 and `npm ci` for the tested dependency graph (`package-lock.json`). The existing Bun lock is also refreshed for Lovable compatibility; CI uses npm. Run `npm run check`, then `npm run test:browser`. Browser tests use the installed Chromium when present, `CHROMIUM_PATH` when configured, or Playwright's bundled browser (`npx playwright install chromium`). They use an isolated API fixture, not live Supabase. Database tests execute migrations in an isolated PostgreSQL engine. Live staging checks and required secure variable names are documented in the security findings.
+
+Never run schema push against production: `drizzle/schema.ts` is an empty generated stub. Review additive SQL migrations on staging. No database migration or environment publication is part of local checks.

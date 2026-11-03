@@ -1,0 +1,64 @@
+# FRAME ZERO recovery audit
+
+Audit date: 3 November 2026. Base: `bc29e443b7748fc943dcd4e84f3e3b9212e2dbb8`. Development branch: `recovery/cloud-foundation`.
+
+## Actual source state
+
+This is a TanStack Start / React 19 Lovable cloud foundation, not the original FastAPI/SQLite Step 14 application. README explicitly states that the local source was not attached/imported. Git history confirms that no authenticated application pages were ever committed. The initial checkout contained landing/auth/legal routes, the P00–P23 catalog, bilingual shell, generic record editor, gates, generated Supabase types and two migrations. The generated Drizzle schema is empty; **do not use schema push/generate to replace the deployed database**. The SQL migrations are the available schema contract.
+
+Recovery preserves the existing UI components, four worlds, stable page IDs, three modes, written proposals and director approvals. New pages bind those components to existing tables; they do not reconstruct unavailable original algorithms. No footage, voice, analysis or other AI results are invented. Step 15 remains blocked.
+
+## Page-by-page result
+
+“Implemented” below means code and local verification exist. Deployed Auth/RLS and database/schema parity remain unverified for every private page.
+
+| ID  | Locked URL                             | Recovered capability                                                                                                                                   | Remaining gap                                                                                                  |
+| --- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------- |
+| P00 | `/projects`                            | Private library query, open, archive/restore, explicitly scoped copy                                                                                   | Copy RPC copies brief/directions/references/cast/world only; no full linked-project duplication                |
+| P01 | `/projects/new`                        | Arabic/English pitch, title, region, four development durations; inserts a real project                                                                | Live account/project creation blocked                                                                          |
+| P02 | `/projects/:id/brief`                  | Separate facts/proposals/approved decisions/notes; optimistic saves; immutable revision RPC                                                            | Live reopen/revision verification pending; snapshot captures saved text only                                   |
+| P03 | `/projects/:id/interpretations`        | Three seeded directions, objectives/obstacles/stakes/camera logic, selection, manual reference-to-original-constraint notes                            | Director's Brain AI analysis/reference retrieval unavailable; reference conversion is manual                   |
+| P04 | `/projects/:id/treatment`              | Film/sequence/scene records, parent and scene links, acting/camera/sound/location/continuity intent, review status, brief-revision drift, written gate | Original treatment engine absent; hierarchy validation and simultaneous approval concurrency need further work |
+| P05 | `/projects/:id/story`                  | Scene order, act, synopsis, dramatic purpose, turning point, location                                                                                  | No original visual story-map engine                                                                            |
+| P06 | `/projects/:id/cast`                   | Fictional profiles, individual appearance separate from region, rights/consent notes, written lock                                                     | Arab Cast Atlas catalog/search and actual image identity locking absent                                        |
+| P07 | `/projects/:id/performances`           | Character+scene-linked objective/obstacle/tactic/cue/listening/physical action/beats, source-version drift, written lock                               | Living Actor Engine analysis/simulation not in source                                                          |
+| P08 | `/projects/:id/locations`              | Governorate/district/place/year/architecture/interiors/props/sound/evidence, written lock, world gate                                                  | Cultural Reality Engine datasets/retrieval/validation absent                                                   |
+| P09 | `/projects/:id/language`               | Character dialect/pronunciation/register/code switching/permissions, scene-linked dialogue/tactics/pauses/overlap                                      | No dialect analysis, speech synthesis or voice cloning                                                         |
+| P10 | `/projects/:id/scenes`                 | Scene editor and links to scene-specific tools                                                                                                         | No generated footage                                                                                           |
+| P11 | `/projects/:id/scenes/:sid/plan`       | Scene-scoped shots, all ten motivated-shot requirements, source-version drift, retake links                                                            | Shot Intelligence recommendations absent; planning is manual                                                   |
+| P12 | `/projects/:id/scenes/:sid/stills`     | Honest unavailable-stage screen; correct scoped routing                                                                                                | Image/storyboard generation not connected                                                                      |
+| P13 | `/projects/:id/scenes/:sid/production` | Honest unavailable-stage screen                                                                                                                        | Motion generation/call sheets not implemented                                                                  |
+| P14 | `/projects/:id/shots/:shotid/retake`   | Persisted written retake notes on the actual shot                                                                                                      | Media retakes unavailable                                                                                      |
+| P15 | `/projects/:id/continuity`             | Scene-linked categorized continuity records                                                                                                            | Automated continuity engine unavailable                                                                        |
+| P16 | `/projects/:id/edit`                   | Locked route retained, explicitly unavailable                                                                                                          | Picture editing not implemented; Step 15+                                                                      |
+| P17 | `/projects/:id/sound`                  | Locked route retained, explicitly unavailable                                                                                                          | Sound pipeline not implemented; Step 15+                                                                       |
+| P18 | `/projects/:id/grade`                  | Locked route retained, explicitly unavailable                                                                                                          | Color pipeline not implemented; Step 15+                                                                       |
+| P19 | `/projects/:id/quality`                | Server-backed readiness, written approval/revocation; generation gates stay blocked                                                                    | Live RPC verification pending; no automatic final-cut analysis                                                 |
+| P20 | `/projects/:id/export`                 | Paginated JSON export of written development tables                                                                                                    | No film render/export; export is not a transactionally consistent database backup                              |
+| P21 | `/projects/:id/versions`               | Latest 100 history events and read-only snapshots                                                                                                      | No historical snapshot restoration UI or pagination                                                            |
+| P22 | `/projects/:id/budget`                 | Manual category/description/quantity/unit cost/currency/notes                                                                                          | No billing, rollups or currency conversion                                                                     |
+| P23 | `/account`                             | Persisted Storyteller/Filmmaker/Director mode, display name, AR/EN; rights/privacy links                                                               | Mode differences currently guidance/hints only; live profile/OAuth/email recovery pending                      |
+
+All 24 leaf routes are tested behind the existing authentication gate. Parent project overview is an additional alias to Creative Brief. Scene/shot pages verify both parent project and nested record access before rendering. Unknown/inaccessible records fail closed.
+
+## Verification evidence
+
+- `npm run typecheck`: passed, strict compiler flags retained.
+- `npm run lint`: passed with 13 existing fast-refresh export warnings, no errors. Generated Supabase files are excluded from formatting lint and remain unchanged; compiler and security inspection still cover their use.
+- `npm test`: 28 passed (24 locked routes, contract/landing, editor conflict preservation and session account-switch privacy).
+- `npm run test:db`: six passed. Executes all three SQL migrations in isolated PGlite PostgreSQL with synthetic Auth/storage schemas and real PostgreSQL role/RLS enforcement. Covers Arabic persistence/reopen, mode, seeded records, snapshots, stale writes, cross-user SELECT/UPDATE/DELETE/INSERT/RPC denial, nested foreign keys, anonymous denial, gates and storage policies. It does not exercise Supabase GoTrue, PostgREST, hosted storage or deployed policy drift.
+- `npm run test:browser`: two passed in system Chromium. Mobile 390×844 journey, all application pages, Egyptian text roundtrip, sign-out/reopen, account mode, no horizontal overflow; public Arabic mobile/English desktop 1440×900. **Uses an isolated API fixture**, not live authentication or RLS. External font CSS is stubbed for deterministic tests; actual font delivery remains deployment-dependent.
+- `npm run build`: passed (client, SSR and Nitro Cloudflare output).
+- Production dependency audit: zero known advisories after Vite/Zod updates. Full toolchain audit: 18 moderate, zero high/critical; details in SECURITY_FINDINGS.md.
+
+## Live blockers and release boundary
+
+The configured backend hostname is `c--fa8d6711-b5ee-47ca-9c57-c9da7f86d0c3-prod.lovable.cloud`. Read-only Auth settings and REST probes both fail at the proxy with `403 Forbidden`. Its name indicates production; no writes, migrations or test users were attempted there. No staging credentials were available. GitHub API access to `api.github.com` also returns Forbidden; PR creation cannot be asserted without a successful API response.
+
+Provide a dedicated staging URL/public key and two test accounts via secure environment configuration, allow that backend hostname through the existing proxy, and run `node tests/live-staging.mjs` with the documented variables. Do not grant a service key to frontend tests. Original Step 14 source must be supplied in a separate checkout/path before claiming functional parity or recovering those algorithms/assets.
+
+This recovery compiles and passes isolated tests. It is **not production-certified**, and Step 15 must not start until live staging Auth/RLS, deployed migrations, original-feature parity and remaining security findings are resolved. No production database or environment publication was changed.
+
+## Review handoff
+
+The development branch was successfully pushed to origin. GitHub rejected draft PR creation (`POST https://api.github.com/graphql`: Forbidden), so no PR number or URL was returned. The complete description is saved in `docs/PULL_REQUEST.md`. Open a draft PR from `recovery/cloud-foundation` into `main` once GitHub API access is available, or use the repository's new-PR page. Nothing was merged or published.
