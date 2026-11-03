@@ -72,4 +72,3 @@ BEGIN
 END $$;
 REVOKE ALL ON FUNCTION public.fz_gate_status(uuid) FROM PUBLIC, anon;
 GRANT EXECUTE ON FUNCTION public.fz_gate_status(uuid) TO authenticated;
-

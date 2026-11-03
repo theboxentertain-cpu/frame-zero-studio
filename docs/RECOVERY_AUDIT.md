@@ -58,3 +58,7 @@ The configured backend hostname is `c--fa8d6711-b5ee-47ca-9c57-c9da7f86d0c3-prod
 Provide a dedicated staging URL/public key and two test accounts via secure environment configuration, allow that backend hostname through the existing proxy, and run `node tests/live-staging.mjs` with the documented variables. Do not grant a service key to frontend tests. Original Step 14 source must be supplied in a separate checkout/path before claiming functional parity or recovering those algorithms/assets.
 
 This recovery compiles and passes isolated tests. It is **not production-certified**, and Step 15 must not start until live staging Auth/RLS, deployed migrations, original-feature parity and remaining security findings are resolved. No production database or environment publication was changed.
+
+## Review handoff
+
+The development branch was successfully pushed to origin. GitHub rejected draft PR creation (`POST https://api.github.com/graphql`: Forbidden), so no PR number or URL was returned. The complete description is saved in `docs/PULL_REQUEST.md`. Open a draft PR from `recovery/cloud-foundation` into `main` once GitHub API access is available, or use the repository's new-PR page. Nothing was merged or published.
