@@ -1,0 +1,58 @@
+name: FRAME ZERO staging schema installation
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "Preview validates everything and rolls back. Apply commits only to staging."
+        required: true
+        default: preview
+        type: choice
+        options:
+          - preview
+          - apply
+      confirmation:
+        description: "For apply only: enter APPLY FRAME ZERO STAGING"
+        required: false
+        default: ""
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: frame-zero-staging-schema
+  cancel-in-progress: false
+
+jobs:
+  migrate-staging:
+    name: Check or install FRAME ZERO in staging
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      STAGING_DATABASE_URL: ${{ secrets.STAGING_DATABASE_URL }}
+      FZ_SCHEMA_MODE: ${{ inputs.mode }}
+      FZ_SCHEMA_CONFIRMATION: ${{ inputs.confirmation }}
+    steps:
+      - name: Checkout recovery foundation
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Checkout CI-tested Step 15 SQL from a pinned commit
+        uses: actions/checkout@v4
+        with:
+          ref: 20f64dd7ce8dbb8ecb431cb74bede5eb3019eab1
+          path: step15-source
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install database driver
+        run: python -m pip install --disable-pip-version-check "psycopg[binary]>=3.2,<4"
+
+      - name: Verify project identity and run safe staging migration
+        run: python .github/scripts/staging_migrate.py
