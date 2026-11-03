@@ -75,10 +75,14 @@ jobs:
               with psycopg.connect(dsn, connect_timeout=12, sslmode="require", autocommit=True) as conn:
                   with conn.cursor() as cur:
                       cur.execute("BEGIN READ ONLY")
-                      cur.execute("SELECT current_database(), current_user, current_setting('transaction_read_only')")
-                      database, user, read_only = cur.fetchone()
-                      if database != "postgres" or user != username or read_only != "on":
-                          fail("The remote database identity or read-only transaction could not be verified.")
+                      # Session poolers can map postgres.<project-ref> to an internal PostgreSQL role.
+                      # Project identity is verified from the URL's login prefix above, not current_user.
+                      cur.execute("SELECT current_database(), current_setting('transaction_read_only')")
+                      database, read_only = cur.fetchone()
+                      if database != "postgres":
+                          fail("Connected, but the database name was unexpected.")
+                      if read_only != "on":
+                          fail("Connected, but the transaction was not read-only.")
                       cur.execute("""
                           SELECT table_name FROM information_schema.tables
                           WHERE table_schema='public'
