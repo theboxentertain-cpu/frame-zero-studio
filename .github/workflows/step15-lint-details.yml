@@ -1,33 +1,10 @@
-name: Step15 lint details
+name: Step15 lint details (disabled)
 on:
-  pull_request:
-    branches: [main]
+  workflow_dispatch:
 permissions:
   contents: read
-  issues: write
-  pull-requests: write
 jobs:
-  lint-explain:
-    if: github.event.pull_request.head.ref == 'feature/step15-still-studio' && github.event.pull_request.head.repo.full_name == github.repository
+  note:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 24
-          cache: npm
-      - run: npm ci
-      - run: npx eslint src/features/stills/StillStudio.tsx --format json > lint.json || true
-      - uses: actions/github-script@v7
-        with:
-          script: |
-            const fs = require('fs');
-            const rows = JSON.parse(fs.readFileSync('lint.json', 'utf8'));
-            const errors = rows.flatMap(r => r.messages.map(m =>
-              'line ' + m.line + ':' + m.column + ' [' + m.ruleId + '] ' + m.message));
-            const body = 'Step 15 lint diagnostic (source file only):\n\n' +
-              (errors.length ? errors.slice(0, 15).map(s => '- ' + s).join('\n') : 'No errors.');
-            await github.rest.issues.createComment({
-              owner: context.repo.owner, repo: context.repo.repo,
-              issue_number: context.issue.number, body
-            });
+      - run: echo "Temporary lint reporting was completed and disabled."
