@@ -1,3 +1,4 @@
+import { StillStudio } from "./stills/StillStudio";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
@@ -239,6 +240,8 @@ export function ProjectEditors({
           </Button>
         ),
       });
+    case "P12":
+      return <StillStudio projectId={projectId} sceneId={sceneId!} />;
     case "P14":
       return editor("shots", {
         filter: { id: shotId! },
