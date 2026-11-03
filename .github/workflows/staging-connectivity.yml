@@ -1,0 +1,95 @@
+name: FRAME ZERO staging connection check
+
+on:
+  workflow_dispatch:
+    inputs:
+      expected_project_ref:
+        description: "Staging project reference from Supabase dashboard URL (not a password)"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: frame-zero-staging-connectivity
+  cancel-in-progress: false
+
+jobs:
+  check-staging-only:
+    name: Verify staging database (read-only)
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      STAGING_DATABASE_URL: ${{ secrets.STAGING_DATABASE_URL }}
+      EXPECTED_PROJECT_REF: ${{ inputs.expected_project_ref }}
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install database driver
+        run: python -m pip install --disable-pip-version-check "psycopg[binary]>=3.2,<4"
+
+      - name: Validate staging identity and test read-only connection
+        shell: bash
+        run: |
+          python - <<'PY'
+          import os
+          import re
+          import sys
+          from urllib.parse import urlsplit, unquote
+          import psycopg
+
+          def fail(message):
+              print("FAILED: " + message, file=sys.stderr)
+              sys.exit(1)
+
+          dsn = os.environ.get("STAGING_DATABASE_URL", "")
+          ref = os.environ.get("EXPECTED_PROJECT_REF", "").strip().lower()
+          if not re.fullmatch(r"[a-z0-9]{8,32}", ref):
+              fail("Enter your staging project reference from the Supabase dashboard URL.")
+          if not dsn:
+              fail("Repository secret STAGING_DATABASE_URL is missing or empty.")
+          try:
+              parsed = urlsplit(dsn)
+              hostname = (parsed.hostname or "").lower()
+              username = unquote(parsed.username or "")
+              password = unquote(parsed.password or "")
+              port = parsed.port
+          except ValueError:
+              fail("The database URL has an invalid format.")
+          if parsed.scheme not in ("postgresql", "postgres"):
+              fail("The secret must contain a PostgreSQL connection URL.")
+          if not hostname.endswith(".pooler.supabase.com"):
+              fail("The URL must point to a Supabase session pooler, not another database.")
+          if port != 5432 or parsed.path != "/postgres":
+              fail("Use the Supabase Session pooler string (port 5432, database postgres).")
+          if username != "postgres." + ref:
+              fail("The connection URL does not match the staging project reference entered.")
+          if not password or password.startswith("[") or password.endswith("]"):
+              fail("Replace the password placeholder with the URL-encoded staging database password.")
+
+          try:
+              with psycopg.connect(dsn, connect_timeout=12, sslmode="require", autocommit=True) as conn:
+                  with conn.cursor() as cur:
+                      cur.execute("BEGIN READ ONLY")
+                      cur.execute("SELECT current_database(), current_user, current_setting('transaction_read_only')")
+                      database, user, read_only = cur.fetchone()
+                      if database != "postgres" or user != username or read_only != "on":
+                          fail("The remote database identity or read-only transaction could not be verified.")
+                      cur.execute("""
+                          SELECT table_name FROM information_schema.tables
+                          WHERE table_schema='public'
+                          AND table_name IN ('projects','scenes','shots','approvals','storyboard_frames')
+                          ORDER BY table_name
+                      """)
+                      existing = [row[0] for row in cur.fetchall()]
+                      cur.execute("ROLLBACK")
+              print("SUCCESS: Connected to the expected Supabase staging project.")
+              print("Verified a read-only transaction. No migrations or writes were executed.")
+              print("Existing FRAME ZERO tables: " + (", ".join(existing) if existing else "(none; fresh staging database)"))
+          except psycopg.Error:
+              fail("Database connection failed. Check the staging password, pooler URL, project status and network access. No credentials were logged.")
+          PY
