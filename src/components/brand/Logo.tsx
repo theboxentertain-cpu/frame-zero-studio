@@ -88,11 +88,11 @@ export function Logo({
           strokeLinecap="square"
         />
         <circle cx={127} cy={33} r={6.5} fill={mono ? "currentColor" : "var(--crimson)"} />
-        <g transform="translate(80 80) scale(0.6) translate(-70 66)">
-          <g fill={mono ? "currentColor" : "var(--ivory)"}>
-            <path transform={`scale(${LOGO.latinScale})`} d={LOGO.latinM} />
-          </g>
-        </g>
+        <path
+          transform={LOGO.iconTransform}
+          d={LOGO.iconM}
+          fill={mono ? "currentColor" : "var(--ivory)"}
+        />
       </svg>
     );
   }
