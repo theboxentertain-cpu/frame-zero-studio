@@ -272,3 +272,9 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* Latin editorial face for the parent endorsement, regardless of UI direction. */
+@utility font-presents {
+  font-family: "Bodoni Moda", ui-serif, Georgia, serif;
+  letter-spacing: 0.02em;
+}

@@ -142,12 +142,10 @@ export function Presents({ className }: { className?: string }) {
   return (
     <p
       dir="ltr"
-      className={cn(
-        "font-display text-sm italic tracking-wide text-ivory/80 [dir=rtl]_&:font-display",
-        className,
-      )}
+      lang="en"
+      className={cn("font-presents text-sm italic tracking-wide text-ivory/80", className)}
     >
-      mrahmostudios <span className="not-italic text-brass">presents</span>
+      mrahmostudios <span className="text-brass">presents</span>
     </p>
   );
 }
