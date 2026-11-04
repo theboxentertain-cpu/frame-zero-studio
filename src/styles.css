@@ -229,3 +229,46 @@
 @utility pb-safe {
   padding-bottom: calc(env(safe-area-inset-bottom) + 5rem);
 }
+
+@utility bg-lamp {
+  background: var(--gradient-lamp);
+}
+
+@utility bg-scrim {
+  background: var(--gradient-scrim);
+}
+
+/* Side scrim follows reading direction so text always sits on the dark side. */
+@utility bg-scrim-side {
+  background: var(--gradient-scrim-side);
+  [dir="rtl"] & {
+    background: linear-gradient(270deg, var(--background) 0%, oklch(0.173 0.004 264.5 / 70%) 38%, transparent 70%);
+  }
+}
+
+@utility bg-walnut {
+  background: var(--gradient-walnut);
+}
+
+@utility shadow-lift {
+  box-shadow: var(--shadow-lift);
+}
+
+/* Slow, physical "lamp warming" motion for illustrated surfaces. */
+@utility motion-lamp {
+  transition:
+    transform 700ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    filter 700ms ease,
+    opacity 400ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
