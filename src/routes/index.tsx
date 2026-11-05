@@ -1,25 +1,28 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { BrandMark, LangToggle } from "@/components/fz/AppShell";
+import { Logo, Presents } from "@/components/brand/Logo";
+import { WorldPortals } from "@/components/brand/Portals";
+import { Director } from "@/components/brand/Director";
+import { OPENING_REMARKS } from "@/lib/director";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { useI18n } from "@/lib/i18n";
-import { WORLDS, PAGES, STATUS_LABEL } from "@/lib/pages";
 import { useSession } from "@/lib/session";
+import controlRoom from "@/assets/director-control-room-sm.webp";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "FRAME ZERO · كادر صفر — From one thought to the final cut" },
+      { title: "MIZENZA · ميزنزا — The Filmmaker's Studio" },
       {
         name: "description",
         content:
-          "A bilingual Arabic/English filmmaker workspace for private film development: brief, directing, cast, world and shot planning.",
+          "Every shot has a reason. A private bilingual Arabic/English workspace where directors write the brief, the cast, the world and every motivated shot.",
       },
-      { property: "og:title", content: "FRAME ZERO · كادر صفر" },
+      { property: "og:title", content: "MIZENZA · ميزنزا" },
       {
         property: "og:description",
         content:
-          "From one thought to the final cut. Story before spectacle. Human director control.",
+          "The Filmmaker's Studio — every shot has a reason. Story before spectacle. Human director control.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -42,9 +45,14 @@ function Landing() {
   const { user } = useSession();
   return (
     <div className="min-h-screen bg-stage">
-      <header className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
-        <BrandMark />
-        <div className="flex items-center gap-1">
+      <header className="mx-auto flex max-w-6xl items-end justify-between px-4 pt-6">
+        <div>
+          <Presents />
+          <Link to="/" className="tap mt-1.5 inline-flex items-center">
+            <BrandMark />
+          </Link>
+        </div>
+        <div className="flex items-center gap-1 pb-1">
           <LangToggle />
           {user ? (
             <Button asChild size="sm" variant="frame">
@@ -58,55 +66,73 @@ function Landing() {
         </div>
       </header>
 
-      <section className="mx-auto max-w-6xl px-4 pt-16 pb-20 md:pt-28">
-        <p className="eyebrow">
+      {/* Control room hero: one illustrated space, every control a real element */}
+      <section className="mx-auto grid max-w-6xl items-center gap-8 px-4 pt-10 pb-16 md:grid-cols-2 md:pt-16">
+        <div>
+          <p className="eyebrow">{t("studio")}</p>
+          <h1 className="mt-4 font-display text-5xl leading-[1.05] text-ivory md:text-7xl">
+            {t("philosophy")}
+          </h1>
+          <p className="mt-4 max-w-xl font-display text-xl italic text-brass md:text-2xl">
+            {t("tagline")}
+          </p>
+          <p className="mt-6 max-w-xl text-base text-muted-foreground md:text-lg">
+            {tx({
+              en: "A private workspace for directors. Write the brief, choose a directing interpretation, build your cast and world, and plan every shot with a reason.",
+              ar: "مساحة خاصة للمخرجين. اكتب الموجز، اختر قراءتك الإخراجية، ابنِ شخصياتك وعالمك، وخطّط كل لقطة بسبب.",
+            })}
+          </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Button asChild size="lg">
+              <Link to={user ? "/projects/new" : "/auth"}>
+                {tx({ en: "Start a film", ar: "ابدأ فيلمًا" })}
+              </Link>
+            </Button>
+            <Button asChild size="lg" variant="outline">
+              <Link to="/rights">{tx({ en: "Rights & honesty", ar: "الحقوق والشفافية" })}</Link>
+            </Button>
+          </div>
+        </div>
+        <figure className="frame-corners shadow-frame relative overflow-hidden rounded-lg border border-border">
+          <img
+            src={controlRoom}
+            alt={tx({
+              en: "The Director's control room: a worn wood desk under a warm brass lamp, storyboard pinboard, camera and viewfinder, annotated shot list and casting wall.",
+              ar: "غرفة تحكم المخرج: مكتب خشب مستهل تحت مصباح نحاسي دافئ، لوحة قصة مثبّتة، كاميرا وعدسة، قائمة لقطات مشروحة وجدار اختيار ممثلين.",
+            })}
+            width={1024}
+            height={1024}
+            className="motion-lamp size-full object-cover"
+          />
+          <div className="bg-scrim absolute inset-x-0 bottom-0 p-4">
+            <figcaption className="text-xs text-ivory/75">
+              {tx({
+                en: "The Director is in. He questions every shot — you make every decision.",
+                ar: "المخرج في مكانه. يسائل كل لقطة — وأنت من يتخذ كل قرار.",
+              })}
+            </figcaption>
+          </div>
+        </figure>
+      </section>
+
+      <section className="mx-auto max-w-3xl px-4 pb-4">
+        <Director remarks={OPENING_REMARKS} showScope={false} />
+      </section>
+
+      <section className="mx-auto max-w-6xl px-4 py-14">
+        <p className="eyebrow">{tx({ en: "Four worlds", ar: "أربعة عوالم" })}</p>
+        <h2 className="mt-3 font-display text-3xl text-ivory md:text-4xl">
           {tx({
-            en: "Egyptian-Arabic flagship · globally extensible",
-            ar: "الإصدار المصري الرائد · قابل للتوسع عالميًا",
+            en: "Walk from his office into the control room.",
+            ar: "من مكتبه إلى غرفة التحكم.",
           })}
-        </p>
-        <h1 className="mt-5 max-w-4xl font-display text-5xl leading-[1.05] text-ivory md:text-8xl">
-          {t("tagline")}
-        </h1>
-        <p className="mt-6 max-w-xl text-base text-muted-foreground md:text-lg">
-          {tx({
-            en: "A private workspace for directors. Write the brief, choose a directing interpretation, build your cast and world, and plan every shot with a reason.",
-            ar: "مساحة خاصة للمخرجين. اكتب الموجز، اختر قراءتك الإخراجية، ابنِ شخصياتك وعالمك، وخطّط كل لقطة بسبب.",
-          })}
-        </p>
-        <div className="mt-10 flex flex-wrap gap-3">
-          <Button asChild size="lg">
-            <Link to={user ? "/projects/new" : "/auth"}>
-              {tx({ en: "Start a film", ar: "ابدأ فيلمًا" })}
-            </Link>
-          </Button>
-          <Button asChild size="lg" variant="outline">
-            <Link to="/rights">{tx({ en: "Rights & honesty", ar: "الحقوق والشفافية" })}</Link>
-          </Button>
+        </h2>
+        <div className="mt-8">
+          <WorldPortals signedIn={!!user} />
         </div>
       </section>
 
-      <section className="mx-auto grid max-w-6xl gap-px overflow-hidden rounded-md border border-border bg-border px-0 md:grid-cols-4">
-        {WORLDS.map((w) => (
-          <div key={w.id} className="bg-surface p-6">
-            <p className="font-mono text-xs text-champagne">0{w.n}</p>
-            <h2 className="mt-3 font-display text-3xl">{tx(w.label)}</h2>
-            <ul className="mt-4 space-y-2 text-sm">
-              {PAGES.filter((p) => p.world === w.id).map((p) => (
-                <li
-                  key={p.id}
-                  className="flex items-center justify-between gap-2 text-muted-foreground"
-                >
-                  <span>{tx(p.label)}</span>
-                  <Badge variant={p.status}>{tx(STATUS_LABEL[p.status])}</Badge>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </section>
-
-      <section className="mx-auto max-w-6xl px-4 py-20">
+      <section className="mx-auto max-w-6xl px-4 pb-16">
         <p className="eyebrow">{tx({ en: "Creative philosophy", ar: "الفلسفة الإبداعية" })}</p>
         <ul className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {PRINCIPLES.map((p, i) => (
@@ -125,7 +151,10 @@ function Landing() {
 
       <footer className="border-t border-border">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-6 text-xs text-muted-foreground">
-          <span>© mrahmo studios</span>
+          <span className="inline-flex items-center gap-2">
+            <Logo variant="icon" className="size-6" decorative />
+            © mrahmostudios
+          </span>
           <div className="flex gap-4">
             <Link to="/privacy" className="tap inline-flex items-center hover:text-foreground">
               {tx({ en: "Privacy", ar: "الخصوصية" })}

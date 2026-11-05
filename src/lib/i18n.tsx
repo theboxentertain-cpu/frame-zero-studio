@@ -62,7 +62,9 @@ export function useI18n() {
 }
 
 export const DICT = {
-  brand: { en: "FRAME ZERO", ar: "كادر صفر" },
+  brand: { en: "MIZENZA", ar: "ميزنزا" },
+  studio: { en: "The Filmmaker's Studio", ar: "استوديو صانع الأفلام" },
+  philosophy: { en: "Every shot has a reason.", ar: "لكل لقطة سبب." },
   tagline: { en: "From one thought to the final cut.", ar: "من فكرة واحدة إلى النسخة النهائية." },
   signIn: { en: "Sign in", ar: "تسجيل الدخول" },
   signUp: { en: "Create account", ar: "إنشاء حساب" },

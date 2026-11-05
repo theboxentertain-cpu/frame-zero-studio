@@ -10,10 +10,10 @@ import { useI18n } from "@/lib/i18n";
 export const Route = createFileRoute("/reset-password")({
   head: () => ({
     meta: [
-      { title: "Set a new password · FRAME ZERO" },
-      { name: "description", content: "Choose a new password for your FRAME ZERO account." },
-      { property: "og:title", content: "Set a new password · FRAME ZERO" },
-      { property: "og:description", content: "Password recovery for FRAME ZERO." },
+      { title: "Set a new password · MIZENZA" },
+      { name: "description", content: "Choose a new password for your MIZENZA account." },
+      { property: "og:title", content: "Set a new password · MIZENZA" },
+      { property: "og:description", content: "Password recovery for MIZENZA." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex" },

@@ -17,9 +17,9 @@ export const Route = createFileRoute("/auth")({
   validateSearch: (s) => searchSchema.parse(s),
   head: () => ({
     meta: [
-      { title: "Sign in · FRAME ZERO كادر صفر" },
-      { name: "description", content: "Sign in to your private FRAME ZERO film workspace." },
-      { property: "og:title", content: "Sign in · FRAME ZERO" },
+      { title: "Sign in · MIZENZA ميزنزا" },
+      { name: "description", content: "Sign in to your private MIZENZA film workspace." },
+      { property: "og:title", content: "Sign in · MIZENZA" },
       { property: "og:description", content: "Access your private film projects." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
