@@ -4,12 +4,12 @@ import { LegalPage } from "@/components/fz/LegalPage";
 export const Route = createFileRoute("/privacy")({
   head: () => ({
     meta: [
-      { title: "Privacy · FRAME ZERO كادر صفر" },
+      { title: "Privacy · MIZENZA ميزنزا" },
       {
         name: "description",
-        content: "How FRAME ZERO keeps your film projects private to your account.",
+        content: "How MIZENZA keeps your film projects private to your account.",
       },
-      { property: "og:title", content: "Privacy · FRAME ZERO" },
+      { property: "og:title", content: "Privacy · MIZENZA" },
       {
         property: "og:description",
         content: "Owner-only access to every project, record and file.",

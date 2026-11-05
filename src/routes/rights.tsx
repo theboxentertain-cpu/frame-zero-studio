@@ -4,12 +4,12 @@ import { LegalPage } from "@/components/fz/LegalPage";
 export const Route = createFileRoute("/rights")({
   head: () => ({
     meta: [
-      { title: "Rights & likeness · FRAME ZERO كادر صفر" },
+      { title: "Rights & likeness · MIZENZA ميزنزا" },
       {
         name: "description",
-        content: "FRAME ZERO's rules on likeness, voice, references and original work.",
+        content: "MIZENZA's rules on likeness, voice, references and original work.",
       },
-      { property: "og:title", content: "Rights & likeness · FRAME ZERO" },
+      { property: "og:title", content: "Rights & likeness · MIZENZA" },
       {
         property: "og:description",
         content: "Fictional characters, written consent, and original constraints from references.",
@@ -22,8 +22,8 @@ export const Route = createFileRoute("/rights")({
     <LegalPage
       title={{ en: "Rights & likeness", ar: "الحقوق والملامح" }}
       intro={{
-        en: "FRAME ZERO is built for original work. It does not copy films, celebrities or real people.",
-        ar: "كادر صفر مصمم للأعمال الأصلية. لا ينسخ أفلامًا أو مشاهير أو أشخاصًا حقيقيين.",
+        en: "MIZENZA is built for original work. It does not copy films, celebrities or real people.",
+        ar: "ميزنزا مصمم للأعمال الأصلية. لا ينسخ أفلامًا أو مشاهير أو أشخاصًا حقيقيين.",
       }}
       sections={[
         {
