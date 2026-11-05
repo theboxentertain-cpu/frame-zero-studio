@@ -16,6 +16,7 @@ import {
   Users,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { Logo, Presents } from "@/components/brand/Logo";
 import { useI18n } from "@/lib/i18n";
 import { PAGES, WORLDS, STATUS_LABEL, worldForPath, type PageDef, type World } from "@/lib/pages";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
@@ -37,19 +38,8 @@ export function firstPageOf(world: World) {
 }
 
 export function BrandMark({ compact = false }: { compact?: boolean }) {
-  const { locale } = useI18n();
-  return (
-    <span className="inline-flex items-baseline gap-2">
-      <span className="font-display text-xl leading-none text-ivory">
-        {locale === "ar" ? "كادر صفر" : "Frame Zero"}
-      </span>
-      {!compact && (
-        <span className="eyebrow hidden opacity-70 sm:inline">
-          {locale === "ar" ? "FRAME ZERO" : "كادر صفر"}
-        </span>
-      )}
-    </span>
-  );
+  if (compact) return <Logo variant="icon" className="size-8" />;
+  return <Logo variant="horizontal" className="h-8 w-auto" />;
 }
 
 export function LangToggle() {
@@ -214,8 +204,9 @@ export function AppShell({
     <div className="min-h-screen bg-background md:flex">
       {/* Desktop sidebar */}
       <aside className="sticky top-0 hidden h-screen w-72 shrink-0 flex-col border-e border-sidebar-border bg-sidebar md:flex">
-        <div className="flex h-16 items-center px-5">
-          <Link to="/projects" className="tap inline-flex items-center">
+        <div className="px-5 pt-4 pb-3">
+          <Presents />
+          <Link to="/projects" className="tap mt-1.5 inline-flex items-center">
             <BrandMark />
           </Link>
         </div>
