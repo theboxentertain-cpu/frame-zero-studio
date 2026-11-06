@@ -63,7 +63,7 @@ function unwrap<T>(r: Result<T>): T {
 }
 
 export async function fetchStoryboard(projectId: string, sceneId: string) {
-  const [shotResult, sceneResult, frameResult] = await Promise.all([
+  const [shotResult, sceneResult, frameResult, gateResult] = await Promise.all([
     supabase
       .from("shots")
       .select(
@@ -80,14 +80,19 @@ export async function fetchStoryboard(projectId: string, sceneId: string) {
       .eq("id", sceneId)
       .single(),
     api.from("storyboard_frames").select("*").eq("project_id", projectId).eq("scene_id", sceneId),
+    supabase.rpc("fz_gate_status", { _project_id: projectId }),
   ]);
   if (shotResult.error) throw shotResult.error;
   if (sceneResult.error) throw sceneResult.error;
   if (frameResult.error) throw frameResult.error;
+  if (gateResult.error) throw gateResult.error;
   return {
     shots: (shotResult.data ?? []) as Shot[],
     sceneVersion: sceneResult.data!.version as number,
     frames: (frameResult.data ?? []) as Frame[],
+    shotListApproved: (gateResult.data ?? []).some(
+      (g) => g.gate === "shot_list" && g.approved && g.ready && !g.stale,
+    ),
   };
 }
 export function current(frame: Frame, shot: Shot, sceneVersion: number) {
@@ -228,7 +233,7 @@ export function downloadStoryboardManifest(
     [
       JSON.stringify(
         {
-          kind: "frame_zero_storyboard_handoff",
+          kind: "mizenza_storyboard_handoff",
           project_id: projectId,
           scene_id: sceneId,
           media_status: "manual_references_only",
@@ -243,7 +248,7 @@ export function downloadStoryboardManifest(
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = "frame-zero-storyboard-" + sceneId + ".json";
+  a.download = "mizenza-storyboard-" + sceneId + ".json";
   a.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
