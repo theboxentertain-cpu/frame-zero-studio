@@ -45,12 +45,14 @@ export function StillStudio({ projectId, sceneId }: { projectId: string; sceneId
         </span>
       </p>
     );
-  const { shots = [], frames = [], sceneVersion = 0 } = query.data ?? {};
+  const { shots = [], frames = [], sceneVersion = 0, shotListApproved = false } = query.data ?? {};
   const prepared = shots.filter((s) =>
     frames.some((f) => f.shot_id === s.id && current(f, s, sceneVersion)),
   ).length;
   const reviewed = shots.filter((s) =>
-    frames.some((f) => f.shot_id === s.id && current(f, s, sceneVersion) && f.reviewed_at),
+    frames.some((f) =>
+      f.shot_id === s.id && current(f, s, sceneVersion) && !!f.reviewed_at && shotListApproved,
+    ),
   ).length;
   async function prepareAll() {
     setBusy(true);
@@ -93,6 +95,14 @@ export function StillStudio({ projectId, sceneId }: { projectId: string; sceneId
             ar: "جهّز كل لقطة معتمدة، وحدّد تكوينها، واستورد صورة تملك حق استخدامها. الصور ليست مولّدة بالذكاء الاصطناعي. إنتاج الصور وبوابة الفيلم النهائي غير متاحين بعد.",
           })}
         </p>
+        {!shotListApproved && (
+          <p role="alert" className="rounded border border-warning/40 p-3 text-sm text-warning">
+            {tx({
+              en: "The shot list is not currently approved. Approve or re-approve it before preparing, importing, or reviewing frames.",
+              ar: "قائمة اللقطات غير معتمدة حاليًا. اعتمدها أو أعد اعتمادها قبل تجهيز الصور أو استيرادها أو مراجعتها.",
+            })}
+          </p>
+        )}
         <div className="flex flex-wrap items-center gap-2 text-sm">
           <Badge variant="partial">
             {prepared}/{shots.length} {tx({ en: "prepared", ar: "مجهّزة" })}
@@ -107,7 +117,7 @@ export function StillStudio({ projectId, sceneId }: { projectId: string; sceneId
         <div className="flex gap-2 flex-wrap">
           <Button
             variant="frame"
-            disabled={busy || shots.length === 0 || prepared === shots.length}
+            disabled={busy || !shotListApproved || shots.length === 0 || prepared === shots.length}
             onClick={prepareAll}
           >
             {busy
@@ -153,7 +163,7 @@ export function StillStudio({ projectId, sceneId }: { projectId: string; sceneId
               ) : (
                 <Badge
                   variant={
-                    !current(frame, shot, sceneVersion)
+                    !current(frame, shot, sceneVersion) || !shotListApproved
                       ? "partial"
                       : frame.reviewed_at
                         ? "live"
@@ -162,6 +172,8 @@ export function StillStudio({ projectId, sceneId }: { projectId: string; sceneId
                 >
                   {!current(frame, shot, sceneVersion)
                     ? tx({ en: "Source changed", ar: "تغير المصدر" })
+                    : !shotListApproved
+                      ? tx({ en: "Shot-list approval missing", ar: "اعتماد قائمة اللقطات مفقود" })
                     : frame.reviewed_at
                       ? tx({ en: "Manual reference reviewed", ar: "تمت مراجعة المرجع اليدوي" })
                       : tx({ en: "Draft / awaiting review", ar: "مسودة / تنتظر المراجعة" })}
@@ -174,6 +186,7 @@ export function StillStudio({ projectId, sceneId }: { projectId: string; sceneId
                 frame={frame}
                 shot={shot}
                 sceneVersion={sceneVersion}
+                shotListApproved={shotListApproved}
                 onUpdated={refresh}
               />
             ) : (
@@ -195,11 +208,13 @@ function FrameCard({
   frame,
   shot,
   sceneVersion,
+  shotListApproved,
   onUpdated,
 }: {
   frame: Frame;
   shot: Shot;
   sceneVersion: number;
+  shotListApproved: boolean;
   onUpdated: () => Promise<unknown>;
 }) {
   const { tx, locale } = useI18n();
@@ -261,6 +276,13 @@ function FrameCard({
     }
   }
   async function upload() {
+    if (dirty) {
+      toast.error(tx({
+        en: "Save your directing notes before importing a reference.",
+        ar: "احفظ ملاحظات الإخراج قبل استيراد المرجع.",
+      }));
+      return;
+    }
     if (!file || !attested) {
       toast.error(
         tx({
@@ -412,14 +434,20 @@ function FrameCard({
         <div className="flex gap-2 flex-wrap">
           <Button
             variant="outline"
-            disabled={busy || !fresh || !file || !attested || rights.trim().length < 8}
+            disabled={
+              busy || !fresh || !shotListApproved || dirty || !file || !attested ||
+              rights.trim().length < 8
+            }
             onClick={upload}
           >
             {tx({ en: "Import private reference", ar: "استيراد المرجع الخاص" })}
           </Button>
           <Button
             variant="frame"
-            disabled={busy || !fresh || dirty || !frame.image_path || !!frame.reviewed_at}
+            disabled={
+              busy || !fresh || !shotListApproved || dirty || !frame.image_path ||
+              !!frame.reviewed_at
+            }
             onClick={review}
           >
             {tx({ en: "Review this frame", ar: "مراجعة هذا الإطار" })}
