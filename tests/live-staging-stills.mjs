@@ -61,7 +61,7 @@ function pngChunk(tag, bytes) {
   for (const byte of source) {
     crc ^= byte;
     for (let i = 0; i < 8; i++) {
-      crc = (crc >>> 1) ^ ((crc & 1) ? 0xedb88320 : 0);
+      crc = (crc >>> 1) ^ (crc & 1 ? 0xedb88320 : 0);
     }
   }
   const checksum = Buffer.alloc(4);
@@ -71,7 +71,9 @@ function pngChunk(tag, bytes) {
 
 // Synthetic 320x240 PNG made locally; no person, image provider, or licensed media.
 function syntheticPng() {
-  const width = 320, height = 240, stride = 1 + width * 3;
+  const width = 320,
+    height = 240,
+    stride = 1 + width * 3;
   const header = Buffer.alloc(13);
   header.writeUInt32BE(width, 0);
   header.writeUInt32BE(height, 4);
@@ -81,8 +83,8 @@ function syntheticPng() {
   for (let y = 0; y < height; y++) {
     for (let x = 0; x < width; x++) {
       const index = y * stride + 1 + 3 * x;
-      pixels[index] = Math.floor(x * 175 / width);
-      pixels[index + 1] = Math.floor(y * 156 / height);
+      pixels[index] = Math.floor((x * 175) / width);
+      pixels[index + 1] = Math.floor((y * 156) / height);
       pixels[index + 2] = 76;
     }
   }
@@ -101,11 +103,15 @@ try {
   assert.notEqual(ownerId, otherId);
 
   const project = await unwrap(
-    a.from("projects").insert({
-      title: "MIZENZA stills staging QA " + randomUUID(),
-      logline_ar: "أم تنتظر على الباب",
-      region: "القاهرة",
-    }).select().single(),
+    a
+      .from("projects")
+      .insert({
+        title: "MIZENZA stills staging QA " + randomUUID(),
+        logline_ar: "أم تنتظر على الباب",
+        region: "القاهرة",
+      })
+      .select()
+      .single(),
     "Create test project",
   );
   projectId = project.id;
@@ -115,18 +121,26 @@ try {
     "Fetch seeded brief",
   );
   await unwrap(
-    a.from("briefs").update({
-      source_facts: "أم تنتظر أمام الباب في الصباح",
-      approved_decisions: "ملاحظة هادئة ومستمرة",
-    }).eq("id", brief.id).eq("version", brief.version),
+    a
+      .from("briefs")
+      .update({
+        source_facts: "أم تنتظر أمام الباب في الصباح",
+        approved_decisions: "ملاحظة هادئة ومستمرة",
+      })
+      .eq("id", brief.id)
+      .eq("version", brief.version),
     "Update creative brief",
   );
   await unwrap(a.rpc("fz_save_brief_revision", { _project_id: projectId }), "Save brief revision");
 
   await unwrap(
     a.from("treatments").insert({
-      project_id: projectId, title: "الفيلم", summary: "فيلم قصير عن الانتظار",
-      level: "film", status: "review", source_brief_revision: 1,
+      project_id: projectId,
+      title: "الفيلم",
+      summary: "فيلم قصير عن الانتظار",
+      level: "film",
+      status: "review",
+      source_brief_revision: 1,
     }),
     "Create film treatment",
   );
@@ -135,22 +149,39 @@ try {
     "Approve film treatment",
   );
   const scene = await unwrap(
-    a.from("scenes").insert({
-      project_id: projectId, title: "المشهد الأول", scene_number: 1,
-      synopsis: "تنتظر الأم وصول ابنها",
-    }).select("id,version").single(),
+    a
+      .from("scenes")
+      .insert({
+        project_id: projectId,
+        title: "المشهد الأول",
+        scene_number: 1,
+        synopsis: "تنتظر الأم وصول ابنها",
+      })
+      .select("id,version")
+      .single(),
     "Create test scene",
   );
   const shot = await unwrap(
-    a.from("shots").insert({
-      project_id: projectId, scene_id: scene.id, shot_number: "01",
-      source_scene_version: scene.version,
-      drama_function: "توقع وصول الابن",
-      subject: "الأم", framing: "متوسطة", lens_rationale: "50mm للشعور الطبيعي",
-      movement_trigger: "static", movement_end: "static", blocking: "الأم عند الباب",
-      duration_sec: 8, editing_reason: "إحساس بالانتظار",
-      continuity_constraints: "المفاتيح على الطاولة",
-    }).select("id,version").single(),
+    a
+      .from("shots")
+      .insert({
+        project_id: projectId,
+        scene_id: scene.id,
+        shot_number: "01",
+        source_scene_version: scene.version,
+        drama_function: "توقع وصول الابن",
+        subject: "الأم",
+        framing: "متوسطة",
+        lens_rationale: "50mm للشعور الطبيعي",
+        movement_trigger: "static",
+        movement_end: "static",
+        blocking: "الأم عند الباب",
+        duration_sec: 8,
+        editing_reason: "إحساس بالانتظار",
+        continuity_constraints: "المفاتيح على الطاولة",
+      })
+      .select("id,version")
+      .single(),
     "Create test shot",
   );
   await unwrap(
@@ -159,8 +190,11 @@ try {
   );
 
   const unauthorizedInsert = await a.from("storyboard_frames").insert({
-    project_id: projectId, scene_id: scene.id, shot_id: shot.id,
-    source_scene_version: scene.version, source_shot_version: shot.version,
+    project_id: projectId,
+    scene_id: scene.id,
+    shot_id: shot.id,
+    source_scene_version: scene.version,
+    source_shot_version: shot.version,
   });
   assert.ok(unauthorizedInsert.error, "Direct owner INSERT must be blocked");
 
@@ -178,7 +212,8 @@ try {
   );
   assert.deepEqual(bRows, []);
   const reviewByB = await b.rpc("fz_review_storyboard", {
-    _frame_id: frameId, _version: frame.version,
+    _frame_id: frameId,
+    _version: frame.version,
   });
   assert.ok(reviewByB.error, "User B must not review user A frame");
   const deleteByA = await a.from("storyboard_frames").delete().eq("id", frameId).select();
@@ -186,7 +221,8 @@ try {
 
   await unwrap(
     a.rpc("fz_save_storyboard", {
-      _frame_id: frameId, _version: frame.version,
+      _frame_id: frameId,
+      _version: frame.version,
       _notes: {
         dramatic_intent: "الأم تستمع ولا تتكلم",
         composition: "لقطة ثابتة ومتوسطة عند الباب",
@@ -208,7 +244,8 @@ try {
   imagePath = ownerId + "/" + projectId + "/stills/" + shot.id + "/" + randomUUID() + ".png";
   await unwrap(
     a.storage.from("project-files").upload(imagePath, bytes, {
-      contentType: "image/png", upsert: false,
+      contentType: "image/png",
+      upsert: false,
     }),
     "Upload synthetic test image to private bucket",
   );
@@ -223,7 +260,9 @@ try {
     "Download owner private image",
   );
   assert.equal(
-    createHash("sha256").update(Buffer.from(await downloaded.arrayBuffer())).digest("hex"),
+    createHash("sha256")
+      .update(Buffer.from(await downloaded.arrayBuffer()))
+      .digest("hex"),
     createHash("sha256").update(bytes).digest("hex"),
     "Storage content must retain byte integrity",
   );
@@ -234,8 +273,11 @@ try {
   const checksum = createHash("sha256").update(bytes).digest("hex");
   await unwrap(
     a.rpc("fz_attach_storyboard", {
-      _frame_id: frameId, _version: frame.version,
-      _path: imagePath, _hash: checksum, _rights_note: rightsNote,
+      _frame_id: frameId,
+      _version: frame.version,
+      _path: imagePath,
+      _hash: checksum,
+      _rights_note: rightsNote,
     }),
     "Attach private reference",
   );
@@ -266,16 +308,22 @@ try {
     "Load current version after revocation",
   );
   const retryReview = await a.rpc("fz_review_storyboard", {
-    _frame_id: frameId, _version: frame.version,
+    _frame_id: frameId,
+    _version: frame.version,
   });
   assert.ok(retryReview.error, "Revocation must block new review");
   const retryAttach = await a.rpc("fz_attach_storyboard", {
-    _frame_id: frameId, _version: frame.version,
-    _path: imagePath, _hash: checksum, _rights_note: rightsNote,
+    _frame_id: frameId,
+    _version: frame.version,
+    _path: imagePath,
+    _hash: checksum,
+    _rights_note: rightsNote,
   });
   assert.ok(retryAttach.error, "Revocation must block new attachment");
 
-  console.log("PASS: two-user isolation, private PNG upload/download and signed URL, director review, locked generation gates, revoked approval.");
+  console.log(
+    "PASS: two-user isolation, private PNG upload/download and signed URL, director review, locked generation gates, revoked approval.",
+  );
 } catch (error) {
   testError = error;
 } finally {
@@ -284,9 +332,13 @@ try {
     if (error) console.error("WARNING: Could not remove synthetic staging reference.");
   }
   if (projectId) {
-    const { error: archiveError } = await a.from("projects").update({
-      status: "archived", archived_at: new Date().toISOString(),
-    }).eq("id", projectId);
+    const { error: archiveError } = await a
+      .from("projects")
+      .update({
+        status: "archived",
+        archived_at: new Date().toISOString(),
+      })
+      .eq("id", projectId);
     if (archiveError) console.error("WARNING: Could not archive disposable staging project.");
     const { error: removeError } = await a.from("projects").delete().eq("id", projectId);
     if (removeError) console.error("WARNING: Could not remove disposable staging project.");
