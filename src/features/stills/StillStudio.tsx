@@ -50,8 +50,9 @@ export function StillStudio({ projectId, sceneId }: { projectId: string; sceneId
     frames.some((f) => f.shot_id === s.id && current(f, s, sceneVersion)),
   ).length;
   const reviewed = shots.filter((s) =>
-    frames.some((f) =>
-      f.shot_id === s.id && current(f, s, sceneVersion) && !!f.reviewed_at && shotListApproved,
+    frames.some(
+      (f) =>
+        f.shot_id === s.id && current(f, s, sceneVersion) && !!f.reviewed_at && shotListApproved,
     ),
   ).length;
   async function prepareAll() {
@@ -174,9 +175,9 @@ export function StillStudio({ projectId, sceneId }: { projectId: string; sceneId
                     ? tx({ en: "Source changed", ar: "تغير المصدر" })
                     : !shotListApproved
                       ? tx({ en: "Shot-list approval missing", ar: "اعتماد قائمة اللقطات مفقود" })
-                    : frame.reviewed_at
-                      ? tx({ en: "Manual reference reviewed", ar: "تمت مراجعة المرجع اليدوي" })
-                      : tx({ en: "Draft / awaiting review", ar: "مسودة / تنتظر المراجعة" })}
+                      : frame.reviewed_at
+                        ? tx({ en: "Manual reference reviewed", ar: "تمت مراجعة المرجع اليدوي" })
+                        : tx({ en: "Draft / awaiting review", ar: "مسودة / تنتظر المراجعة" })}
                 </Badge>
               )}
             </div>
@@ -277,10 +278,12 @@ function FrameCard({
   }
   async function upload() {
     if (dirty) {
-      toast.error(tx({
-        en: "Save your directing notes before importing a reference.",
-        ar: "احفظ ملاحظات الإخراج قبل استيراد المرجع.",
-      }));
+      toast.error(
+        tx({
+          en: "Save your directing notes before importing a reference.",
+          ar: "احفظ ملاحظات الإخراج قبل استيراد المرجع.",
+        }),
+      );
       return;
     }
     if (!file || !attested) {
@@ -435,7 +438,12 @@ function FrameCard({
           <Button
             variant="outline"
             disabled={
-              busy || !fresh || !shotListApproved || dirty || !file || !attested ||
+              busy ||
+              !fresh ||
+              !shotListApproved ||
+              dirty ||
+              !file ||
+              !attested ||
               rights.trim().length < 8
             }
             onClick={upload}
@@ -445,7 +453,11 @@ function FrameCard({
           <Button
             variant="frame"
             disabled={
-              busy || !fresh || !shotListApproved || dirty || !frame.image_path ||
+              busy ||
+              !fresh ||
+              !shotListApproved ||
+              dirty ||
+              !frame.image_path ||
               !!frame.reviewed_at
             }
             onClick={review}

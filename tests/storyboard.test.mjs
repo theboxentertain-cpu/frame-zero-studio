@@ -77,10 +77,12 @@ test("Prepare only an approved, current shot plan", async () => {
     await assert.rejects(db.query("SELECT fz_prepare_storyboard($1)", [shot]));
     await db.query("SELECT fz_approve_gate($1,'shot_list')", [project]);
     // An authenticated owner cannot insert records without the preparation RPC.
-    await assert.rejects(db.query(
-      "INSERT INTO storyboard_frames(project_id,scene_id,shot_id,source_scene_version,source_shot_version) VALUES ($1,$2,$3,1,1)",
-      [project, scene, shot],
-    ));
+    await assert.rejects(
+      db.query(
+        "INSERT INTO storyboard_frames(project_id,scene_id,shot_id,source_scene_version,source_shot_version) VALUES ($1,$2,$3,1,1)",
+        [project, scene, shot],
+      ),
+    );
     frame = (await db.query("SELECT fz_prepare_storyboard($1) id", [shot])).rows[0].id;
     const rec = (await db.query("SELECT * FROM storyboard_frames WHERE id=$1", [frame])).rows[0];
     assert.equal(rec.reviewed_at, null);
@@ -144,9 +146,15 @@ test("Stale versions, imported image provenance and source drift", async () => {
     // Revoked approval must block a fresh manual reference and review.
     await db.query("SELECT fz_revoke_gate($1,'shot_list')", [project]);
     await assert.rejects(db.query("SELECT fz_review_storyboard($1,$2)", [frame, row.version]));
-    await assert.rejects(db.query("SELECT fz_attach_storyboard($1,$2,$3,$4,$5)", [
-      frame, row.version, path, "a".repeat(64), "Original image I own and can use",
-    ]));
+    await assert.rejects(
+      db.query("SELECT fz_attach_storyboard($1,$2,$3,$4,$5)", [
+        frame,
+        row.version,
+        path,
+        "a".repeat(64),
+        "Original image I own and can use",
+      ]),
+    );
     await db.query("UPDATE shots SET blocking='moved' WHERE id=$1", [shot]);
     await assert.rejects(db.query("SELECT fz_review_storyboard($1,$2)", [frame, row.version + 1]));
   });

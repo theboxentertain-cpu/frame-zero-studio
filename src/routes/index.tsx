@@ -152,8 +152,7 @@ function Landing() {
       <footer className="border-t border-border">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-6 text-xs text-muted-foreground">
           <span className="inline-flex items-center gap-2">
-            <Logo variant="icon" className="size-6" decorative />
-            © mrahmostudios
+            <Logo variant="icon" className="size-6" decorative />© mrahmostudios
           </span>
           <div className="flex gap-4">
             <Link to="/privacy" className="tap inline-flex items-center hover:text-foreground">
