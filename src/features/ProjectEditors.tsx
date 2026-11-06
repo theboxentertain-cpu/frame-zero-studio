@@ -18,6 +18,7 @@ import {
   type TableName,
 } from "@/lib/records";
 import { fields } from "./editor-definitions";
+import { StillStudio } from "./stills/StillStudio";
 
 type EditorTable = keyof typeof fields;
 export function ProjectEditors({
@@ -239,6 +240,8 @@ export function ProjectEditors({
           </Button>
         ),
       });
+    case "P12":
+      return <StillStudio projectId={projectId} sceneId={sceneId!} />;
     case "P14":
       return editor("shots", {
         filter: { id: shotId! },
