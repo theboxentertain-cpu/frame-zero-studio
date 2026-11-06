@@ -90,10 +90,7 @@ try {
       .eq("version", seededBrief.version),
     "Update brief",
   );
-  ok(
-    await a.rpc("fz_save_brief_revision", { _project_id: projectId }),
-    "Save brief revision",
-  );
+  ok(await a.rpc("fz_save_brief_revision", { _project_id: projectId }), "Save brief revision");
   ok(
     await a.from("treatments").insert({
       project_id: projectId,
@@ -200,13 +197,7 @@ try {
   );
   assert.equal(nextVersion, frame.version + 1);
 
-  imagePath = [
-    userA,
-    projectId,
-    "stills",
-    shot.id,
-    randomUUID() + ".png",
-  ].join("/");
+  imagePath = [userA, projectId, "stills", shot.id, randomUUID() + ".png"].join("/");
   ok(
     await a.storage
       .from("project-files")
