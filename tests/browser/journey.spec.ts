@@ -191,7 +191,7 @@ test("public landing supports Arabic mobile and English desktop without overflow
   await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
   await page.setViewportSize({ width: 1440, height: 900 });
   await expect(
-    page.getByRole("heading", { name: "From one thought to the final cut." }),
+    page.getByRole("heading", { name: "Every shot has a reason." }),
   ).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
