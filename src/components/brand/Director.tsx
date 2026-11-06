@@ -48,7 +48,9 @@ function PresenceSwitch({
           onClick={() => onChange(o.v)}
           className={cn(
             "tap rounded px-3 text-xs transition-colors",
-            value === o.v ? "bg-brass-dim text-brass" : "text-muted-foreground hover:text-foreground",
+            value === o.v
+              ? "bg-brass-dim text-brass"
+              : "text-muted-foreground hover:text-foreground",
           )}
         >
           {tx(o.l)}
@@ -80,7 +82,10 @@ export function Director({
     return (
       <div className={cn("flex items-center justify-between gap-3", className)}>
         <p className="text-xs text-muted-foreground">
-          {tx({ en: "The Director is off. Call him back any time.", ar: "المخرج غائب. استدعِه متى شئت." })}
+          {tx({
+            en: "The Director is off. Call him back any time.",
+            ar: "المخرج غائب. استدعِه متى شئت.",
+          })}
         </p>
         <PresenceSwitch value={presence} onChange={setPresence} />
       </div>
@@ -131,7 +136,10 @@ export function Director({
           ) : (
             <ul className="mt-3 space-y-2">
               {remarks.map((r) => (
-                <li key={r.key} className="border-s-2 border-crimson/70 ps-3 text-sm leading-relaxed text-ivory/90">
+                <li
+                  key={r.key}
+                  className="border-s-2 border-crimson/70 ps-3 text-sm leading-relaxed text-ivory/90"
+                >
                   <span className="font-display text-base italic">“{tx(r.text)}”</span>
                   {r.seg && projectId && (
                     <Link

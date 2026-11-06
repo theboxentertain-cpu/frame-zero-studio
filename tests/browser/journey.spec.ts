@@ -155,6 +155,10 @@ test("mobile Arabic journey: sign in, create film, save brief/revision, sign out
     await page.goto(`/projects/${pid}/${path}`);
     await expect(page.locator("h1")).toBeVisible();
     await expect(page.getByText("This page didn't load", { exact: false })).toHaveCount(0);
+    if (path === `scenes/${sid}/stills`) {
+      await expect(page.getByText("التوليد بالذكاء الاصطناعي: غير متصل")).toBeVisible();
+      await expect(page.getByRole("button", { name: "تجهيز مراجع اللقطات" })).toBeDisabled();
+    }
     expect(
       await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
     ).toBe(true);
@@ -186,8 +190,6 @@ test("public landing supports Arabic mobile and English desktop without overflow
   await page.getByRole("button", { name: "Switch to English" }).click();
   await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
   await page.setViewportSize({ width: 1440, height: 900 });
-  await expect(
-    page.getByRole("heading", { name: "From one thought to the final cut." }),
-  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Every shot has a reason." })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });

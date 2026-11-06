@@ -18,6 +18,7 @@ import {
   type TableName,
 } from "@/lib/records";
 import { fields } from "./editor-definitions";
+import { StillStudio } from "./stills/StillStudio";
 
 type EditorTable = keyof typeof fields;
 export function ProjectEditors({
@@ -239,6 +240,8 @@ export function ProjectEditors({
           </Button>
         ),
       });
+    case "P12":
+      return <StillStudio projectId={projectId} sceneId={sceneId!} />;
     case "P14":
       return editor("shots", {
         filter: { id: shotId! },
@@ -260,8 +263,8 @@ export function ProjectEditors({
       return (
         <RoadmapPanel
           requires={{
-            en: "Media generation and finishing are not connected. Step 15 has not started.",
-            ar: "توليد الوسائط والإنهاء غير متصلين. لم تبدأ المرحلة 15.",
+            en: "AI media generation and finishing remain unavailable. Step 15 supports manual storyboards only.",
+            ar: "توليد الصور والفيديو والمونتاج غير متاح بعد. تدعم المرحلة 15 المراجع المصورة اليدوية فقط.",
           }}
           plan={[]}
         />

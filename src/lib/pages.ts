@@ -177,11 +177,11 @@ export const PAGES: PageDef[] = [
     world: "direct",
     scope: "scene",
     seg: "stills",
-    status: "roadmap",
+    status: "partial",
     label: { en: "Visual Storyboard", ar: "اللوحة المصورة" },
     summary: {
-      en: "Still frames — requires image generation (not connected).",
-      ar: "إطارات ثابتة — تتطلب توليد صور (غير متصل).",
+      en: "Manual shot references and director review; AI generation not connected.",
+      ar: "مراجع صور يدوية ومراجعة المخرج؛ توليد الصور غير متصل.",
     },
   },
   {

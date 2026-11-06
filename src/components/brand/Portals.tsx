@@ -8,10 +8,22 @@ import { useI18n, type Bi } from "@/lib/i18n";
 import { PAGES, STATUS_LABEL, WORLDS } from "@/lib/pages";
 
 const ART: Record<string, { src: string; place: Bi }> = {
-  create: { src: createImg, place: { en: "Screenplay & treatment desk", ar: "مكتب السيناريو والمعالجة" } },
-  cast_world: { src: castImg, place: { en: "Casting & location wall", ar: "جدار الممثلين والأماكن" } },
-  direct: { src: directImg, place: { en: "Camera, monitor & storyboard wall", ar: "الكاميرا والشاشة ولوحة القصة" } },
-  finish: { src: finishImg, place: { en: "Editing desk & timeline", ar: "مكتب المونتاج والخط الزمني" } },
+  create: {
+    src: createImg,
+    place: { en: "Screenplay & treatment desk", ar: "مكتب السيناريو والمعالجة" },
+  },
+  cast_world: {
+    src: castImg,
+    place: { en: "Casting & location wall", ar: "جدار الممثلين والأماكن" },
+  },
+  direct: {
+    src: directImg,
+    place: { en: "Camera, monitor & storyboard wall", ar: "الكاميرا والشاشة ولوحة القصة" },
+  },
+  finish: {
+    src: finishImg,
+    place: { en: "Editing desk & timeline", ar: "مكتب المونتاج والخط الزمني" },
+  },
 };
 
 /**
@@ -46,7 +58,10 @@ export function WorldPortals({ projectId, signedIn }: { projectId?: string; sign
             </div>
             <ul className="space-y-1.5 p-4 text-sm">
               {pages.map((p) => (
-                <li key={p.id} className="flex items-center justify-between gap-2 text-muted-foreground">
+                <li
+                  key={p.id}
+                  className="flex items-center justify-between gap-2 text-muted-foreground"
+                >
                   <span className="truncate">{tx(p.label)}</span>
                   <Badge variant={p.status}>{tx(STATUS_LABEL[p.status])}</Badge>
                 </li>

@@ -44,7 +44,17 @@ function Latin({ mono }: { mono: boolean }) {
   );
 }
 
-function Arabic({ mono, x, y, scale = 1 }: { mono: boolean; x: number; y: number; scale?: number }) {
+function Arabic({
+  mono,
+  x,
+  y,
+  scale = 1,
+}: {
+  mono: boolean;
+  x: number;
+  y: number;
+  scale?: number;
+}) {
   return (
     <g
       transform={`translate(${x} ${y}) scale(${LOGO.arabicScale * scale})`}
