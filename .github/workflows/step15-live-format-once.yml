@@ -1,0 +1,29 @@
+name: MIZENZA Step 15 format-once
+on:
+  push:
+    branches: [feature/step15-live-staging-verification]
+permissions:
+  contents: write
+jobs:
+  format:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npx prettier --write tests/live-staging-stills.mjs
+      - name: Commit formatting on development branch only
+        run: |
+          if ! git diff --quiet -- tests/live-staging-stills.mjs; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add tests/live-staging-stills.mjs
+            git commit -m "style: format live Step 15 staging test"
+            git push origin HEAD:feature/step15-live-staging-verification
+          fi
