@@ -190,8 +190,6 @@ test("public landing supports Arabic mobile and English desktop without overflow
   await page.getByRole("button", { name: "Switch to English" }).click();
   await expect(page.locator("html")).toHaveAttribute("dir", "ltr");
   await page.setViewportSize({ width: 1440, height: 900 });
-  await expect(
-    page.getByRole("heading", { name: "Every shot has a reason." }),
-  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Every shot has a reason." })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
