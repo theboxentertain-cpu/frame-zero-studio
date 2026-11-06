@@ -263,7 +263,8 @@ export function ProjectEditors({
       return (
         <RoadmapPanel
           requires={{
-            en: "AI media generation and finishing remain unavailable. Step 15 supports manual storyboards only.",
+            en:
+              "AI media generation and finishing remain unavailable. Step 15 supports manual storyboards only.",
             ar: "توليد الصور والفيديو والمونتاج غير متاح بعد. تدعم المرحلة 15 المراجع المصورة اليدوية فقط.",
           }}
           plan={[]}
