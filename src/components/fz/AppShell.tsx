@@ -39,7 +39,12 @@ export function firstPageOf(world: World) {
 
 export function BrandMark({ compact = false }: { compact?: boolean }) {
   if (compact) return <Logo variant="icon" className="size-8" />;
-  return <Logo variant="horizontal" className="h-8 w-auto" />;
+  return (
+    <>
+      <Logo variant="icon" className="size-9 sm:hidden" />
+      <Logo variant="horizontal" className="hidden h-8 w-auto sm:block" />
+    </>
+  );
 }
 
 export function LangToggle() {

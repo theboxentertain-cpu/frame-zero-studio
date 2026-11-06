@@ -13,6 +13,7 @@ import { useSession } from "@/lib/session";
 import { errorMessage, projectQuery, updateRow, type Row } from "@/lib/records";
 import { PAGES } from "@/lib/pages";
 import { ProjectEditors } from "./ProjectEditors";
+import { WorldPortals } from "@/components/brand/Portals";
 
 export function ProjectLibrary() {
   const { tx, t } = useI18n();
@@ -249,7 +250,38 @@ export function ProjectPage({
   );
 }
 export function ProjectOverview({ projectId }: { projectId: string }) {
-  return <ProjectPage projectId={projectId} pageId="P02" />;
+  const { tx } = useI18n();
+  const q = useQuery(projectQuery(projectId));
+  if (q.isLoading) return <LoadingBlock />;
+  if (q.error || !q.data)
+    return (
+      <AppShell>
+        <p role="alert" className="p-4">
+          {q.error
+            ? errorMessage(q.error)
+            : tx({
+                en: "Project not found, or access denied.",
+                ar: "المشروع غير موجود، أو لا تملك صلاحية الوصول.",
+              })}
+        </p>
+      </AppShell>
+    );
+  return (
+    <AppShell projectId={projectId} projectTitle={q.data.title}>
+      <header className="px-4 pt-6 pb-4 md:px-8 md:pt-10">
+        <p className="eyebrow">{tx({ en: "Control room", ar: "غرفة التحكم" })}</p>
+        <h1 className="mt-2 break-words font-display text-3xl text-ivory md:text-5xl">
+          {q.data.title}
+        </h1>
+        <p dir="auto" className="mt-2 max-w-2xl text-sm text-muted-foreground">
+          {q.data.logline_ar || q.data.logline_en}
+        </p>
+      </header>
+      <main className="px-4 pb-6 md:px-8">
+        <WorldPortals projectId={projectId} />
+      </main>
+    </AppShell>
+  );
 }
 export function Account() {
   const { user, profile } = useSession();
