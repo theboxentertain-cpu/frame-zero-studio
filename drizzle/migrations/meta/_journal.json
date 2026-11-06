@@ -43,6 +43,13 @@
       "when": 1793685000005,
       "tag": "0005_step15_versioned_writes",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1793685000006,
+      "tag": "0006_step15_approval_integrity",
+      "breakpoints": true
     }
   ]
 }
