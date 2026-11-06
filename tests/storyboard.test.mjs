@@ -27,6 +27,7 @@ for (const f of [
   "0003_step15_storyboard.sql",
   "0004_step15_review.sql",
   "0005_step15_versioned_writes.sql",
+  "0006_step15_approval_integrity.sql",
 ]) {
   await db.exec(readFileSync(new URL("../drizzle/migrations/" + f, import.meta.url), "utf8"));
 }
@@ -133,6 +134,12 @@ test("Stale versions, imported image provenance and source drift", async () => {
     await assert.rejects(
       db.query("UPDATE storyboard_frames SET image_path='forged' WHERE id=$1", [frame]),
     );
+    // Revoked approval must block a fresh manual reference and review.
+    await db.query("SELECT fz_revoke_gate($1,'shot_list')", [project]);
+    await assert.rejects(db.query("SELECT fz_review_storyboard($1,$2)", [frame, row.version]));
+    await assert.rejects(db.query("SELECT fz_attach_storyboard($1,$2,$3,$4,$5)", [
+      frame, row.version, path, "a".repeat(64), "Original image I own and can use",
+    ]));
     await db.query("UPDATE shots SET blocking='moved' WHERE id=$1", [shot]);
     await assert.rejects(db.query("SELECT fz_review_storyboard($1,$2)", [frame, row.version + 1]));
   });
