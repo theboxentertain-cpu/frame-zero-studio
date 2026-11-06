@@ -1,0 +1,38 @@
+name: Step 15 MIZENZA one-time formatting
+on:
+  push:
+    branches: [feature/step15-mizenza-integration]
+permissions:
+  contents: write
+jobs:
+  format:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Apply existing Prettier rules to failing files only
+        run: >
+          npx prettier --write
+          src/components/brand/Director.tsx
+          src/components/brand/Logo.tsx
+          src/components/brand/Portals.tsx
+          src/components/brand/logo-paths.ts
+          src/features/stills/StillStudio.tsx
+          src/routes/index.tsx
+          tests/storyboard.test.mjs
+      - name: Commit formatting without affecting main
+        run: |
+          if ! git diff --quiet; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add src/components/brand src/features/stills/StillStudio.tsx src/routes/index.tsx tests/storyboard.test.mjs
+            git commit -m "style(step15): format MIZENZA integration using repo rules"
+            git push origin HEAD:feature/step15-mizenza-integration
+          fi
