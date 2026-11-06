@@ -76,11 +76,18 @@ test("Prepare only an approved, current shot plan", async () => {
     shot = (await db.query(sql, [project, scene])).rows[0].id;
     await assert.rejects(db.query("SELECT fz_prepare_storyboard($1)", [shot]));
     await db.query("SELECT fz_approve_gate($1,'shot_list')", [project]);
+    // An authenticated owner cannot insert records without the preparation RPC.
+    await assert.rejects(db.query(
+      "INSERT INTO storyboard_frames(project_id,scene_id,shot_id,source_scene_version,source_shot_version) VALUES ($1,$2,$3,1,1)",
+      [project, scene, shot],
+    ));
     frame = (await db.query("SELECT fz_prepare_storyboard($1) id", [shot])).rows[0].id;
     const rec = (await db.query("SELECT * FROM storyboard_frames WHERE id=$1", [frame])).rows[0];
     assert.equal(rec.reviewed_at, null);
     assert.equal(rec.project_id, project);
     assert.equal(rec.dramatic_intent, "دافع");
+    // Deletion must use controlled server operations rather than direct table grants.
+    await assert.rejects(db.query("DELETE FROM storyboard_frames WHERE id=$1", [frame]));
   });
 });
 test("Only the owner can see frames or request review", async () => {
