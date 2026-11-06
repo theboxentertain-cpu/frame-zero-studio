@@ -1,0 +1,50 @@
+name: MIZENZA Step 15 live image security
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirmation:
+        description: "For staging-only test, enter RUN MIZENZA STAGING IMAGES"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: frame-zero-staging-schema
+  cancel-in-progress: false
+
+jobs:
+  live-private-images:
+    name: Two-user private storyboard test
+    if: github.ref == 'refs/heads/main' && inputs.confirmation == 'RUN MIZENZA STAGING IMAGES'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      FZ_TEST_URL: https://crvgvcokzryoxyvjkhxn.supabase.co
+      FZ_TEST_PUBLIC_KEY: ${{ secrets.FZ_TEST_PUBLIC_KEY }}
+      FZ_TEST_A_EMAIL: ${{ secrets.FZ_TEST_A_EMAIL }}
+      FZ_TEST_A_PASSWORD: ${{ secrets.FZ_TEST_A_PASSWORD }}
+      FZ_TEST_B_EMAIL: ${{ secrets.FZ_TEST_B_EMAIL }}
+      FZ_TEST_B_PASSWORD: ${{ secrets.FZ_TEST_B_PASSWORD }}
+      FZ_STAGING_VERIFIED: "yes"
+    steps:
+      - name: Checkout trusted main
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify two real accounts and the Step 15 private image pipeline
+        run: |
+          node -e 'const e=process.env;if(!e.FZ_TEST_PUBLIC_KEY||!e.FZ_TEST_A_EMAIL||!e.FZ_TEST_A_PASSWORD||!e.FZ_TEST_B_EMAIL||!e.FZ_TEST_B_PASSWORD)throw Error("Add both Supabase staging test users and five GitHub repository secrets.")'
+          node tests/live-staging-stills.mjs
