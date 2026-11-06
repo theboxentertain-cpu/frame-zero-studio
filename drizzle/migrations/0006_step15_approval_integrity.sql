@@ -3,6 +3,8 @@
 -- Require all record creation through fz_prepare_storyboard. The older 0003
 -- migration granted direct INSERT/DELETE, which bypassed the approval RPC.
 REVOKE INSERT, DELETE ON public.storyboard_frames FROM authenticated;
+REVOKE INSERT (project_id,scene_id,shot_id,source_scene_version,source_shot_version)
+  ON public.storyboard_frames FROM authenticated;
 
 -- Harden attach and director review against withdrawn/stale shot-list approval.
 -- A manual reference NEVER advances the 'film_stills' generation gate.
