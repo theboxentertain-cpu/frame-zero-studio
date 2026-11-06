@@ -1,6 +1,11 @@
 name: MIZENZA Step 15 staging migration 0006
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/scripts/staging_step15_0006.py"
+      - ".github/workflows/step15-staging-0006.yml"
   workflow_dispatch:
     inputs:
       mode:
@@ -32,7 +37,7 @@ jobs:
     timeout-minutes: 10
     env:
       STAGING_DATABASE_URL: ${{ secrets.STAGING_DATABASE_URL }}
-      MIZENZA_MIGRATION_MODE: ${{ inputs.mode }}
+      MIZENZA_MIGRATION_MODE: ${{ github.event_name == 'push' && 'preview' || inputs.mode }}
       MIZENZA_MIGRATION_CONFIRMATION: ${{ inputs.confirmation }}
     steps:
       - name: Checkout trusted main
