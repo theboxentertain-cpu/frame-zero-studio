@@ -165,6 +165,10 @@ export async function sanitizeImage(file: File): Promise<{ data: Blob; sha256: s
         0.88,
       ),
     );
+    // Some browsers silently fall back to PNG when WebP encoding is unsupported.
+    // Never upload those bytes while declaring an image/webp content type.
+    if (blob.type !== "image/webp")
+      throw new Error("WebP encoding is unavailable in this browser.");
     if (blob.size > 8 * 1024 * 1024) throw new Error("Converted image is too large.");
     const hash = await crypto.subtle.digest("SHA-256", await blob.arrayBuffer());
     const sha256 = Array.from(new Uint8Array(hash))
