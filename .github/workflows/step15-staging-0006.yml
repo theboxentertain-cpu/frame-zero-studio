@@ -1,0 +1,58 @@
+name: MIZENZA Step 15 staging 0006 verification
+
+on:
+  push:
+    branches:
+      - feature/step15-staging-0006-verify
+    paths:
+      - ".github/workflows/step15-staging-0006.yml"
+      - ".github/scripts/staging_0006.py"
+      - "drizzle/migrations/0006_step15_approval_integrity.sql"
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "Preview rolls back. Apply commits 0006 only on staging."
+        required: true
+        default: preview
+        type: choice
+        options:
+          - preview
+          - apply
+      confirmation:
+        description: "For Apply, type APPLY MIZENZA 0006 TO STAGING"
+        required: false
+        default: ""
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mizenza-staging-schema
+  cancel-in-progress: false
+
+jobs:
+  verify-step15:
+    name: Verify incremental staging migration 0006
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      STAGING_DATABASE_URL: ${{ secrets.STAGING_DATABASE_URL }}
+      FZ_0006_MODE: ${{ github.event_name == 'push' && 'preview' || inputs.mode }}
+      FZ_0006_CONFIRMATION: ${{ inputs.confirmation }}
+    steps:
+      - name: Checkout MIZENZA SQL
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install PostgreSQL driver
+        run: python -m pip install --disable-pip-version-check "psycopg[binary]>=3.2,<4"
+
+      - name: Validate staging target and preview/apply 0006
+        run: python .github/scripts/staging_0006.py

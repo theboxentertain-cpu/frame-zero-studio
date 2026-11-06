@@ -1,4 +1,4 @@
-name: FRAME ZERO live staging security test
+name: MIZENZA live staging security test
 
 on:
   workflow_dispatch:
@@ -48,3 +48,6 @@ jobs:
         run: |
           node -e 'const e=process.env;const k=e.FZ_TEST_PUBLIC_KEY||"";if(e.FZ_TEST_URL!=="https://crvgvcokzryoxyvjkhxn.supabase.co"||!k||!e.FZ_TEST_A_EMAIL||!e.FZ_TEST_A_PASSWORD||!e.FZ_TEST_B_EMAIL||!e.FZ_TEST_B_PASSWORD)throw Error("Staging connection or test account GitHub secrets are missing.")'
           node tests/live-staging.mjs
+
+      - name: Run Step 15 live two-account image and review tests
+        run: node tests/live-stills-staging.mjs
