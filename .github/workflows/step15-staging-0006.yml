@@ -1,0 +1,52 @@
+name: MIZENZA Step 15 staging migration 0006
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "Preview rolls back; Apply commits to the locked staging project only"
+        required: true
+        default: preview
+        type: choice
+        options:
+          - preview
+          - apply
+      confirmation:
+        description: "For Apply only, enter APPLY MIZENZA STAGING 0006"
+        required: false
+        default: ""
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: frame-zero-staging-schema
+  cancel-in-progress: false
+
+jobs:
+  step15-staging-only:
+    name: Validate/apply Step 15 integrity controls
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      STAGING_DATABASE_URL: ${{ secrets.STAGING_DATABASE_URL }}
+      MIZENZA_MIGRATION_MODE: ${{ inputs.mode }}
+      MIZENZA_MIGRATION_CONFIRMATION: ${{ inputs.confirmation }}
+    steps:
+      - name: Checkout trusted main
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install PostgreSQL driver
+        run: python -m pip install --disable-pip-version-check "psycopg[binary]>=3.2,<4"
+
+      - name: Verify staging identity and transactionally execute migration 0006
+        run: python .github/scripts/staging_step15_0006.py
