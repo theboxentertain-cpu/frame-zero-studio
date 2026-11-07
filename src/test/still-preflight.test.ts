@@ -46,6 +46,12 @@ const sample = (overrides: Partial<Parameters<typeof buildStillPreflightReport>[
     ...overrides,
   });
 
+function firstShot(report: ReturnType<typeof buildStillPreflightReport>) {
+  const entry = report.shots[0];
+  if (!entry) throw new Error("Expected a shot preflight result");
+  return entry;
+}
+
 describe("MIZENZA Step 16 read-only still preflight", () => {
   it("never authorizes generation even when manual reference checks are satisfied", () => {
     const report = sample();
@@ -59,13 +65,13 @@ describe("MIZENZA Step 16 read-only still preflight", () => {
       manual_references_reviewed: 1,
       shots_with_blockers: 0,
     });
-    expect(report.shots[0].generation).toEqual({
+    expect(firstShot(report).generation).toEqual({
       allowed: false,
       provider: "not_connected",
       result: "not_generated",
     });
-    expect(report.shots[0].reference.rights_independently_verified).toBe(false);
-    expect(report.shots[0].continuity).toEqual({
+    expect(firstShot(report).reference.rights_independently_verified).toBe(false);
+    expect(firstShot(report).continuity).toEqual({
       identity_verified: false,
       world_verified: false,
     });
@@ -74,25 +80,25 @@ describe("MIZENZA Step 16 read-only still preflight", () => {
   it("blocks direction readiness when the shot-list approval is missing", () => {
     const report = sample({ shotListApproved: false });
     expect(report.summary.direction_ready).toBe(0);
-    expect(report.shots[0].blockers).toContain("shot_list_not_approved");
-    expect(report.shots[0].reference.reviewed).toBe(false);
+    expect(firstShot(report).blockers).toContain("shot_list_not_approved");
+    expect(firstShot(report).reference.reviewed).toBe(false);
   });
 
   it("rejects a changed shot or scene source despite an old review", () => {
     const report = sample({ sceneVersion: 5 });
-    expect(report.shots[0].blockers).toContain("shot_source_changed");
-    expect(report.shots[0].reference.reviewed).toBe(false);
+    expect(firstShot(report).blockers).toContain("shot_source_changed");
+    expect(firstShot(report).reference.reviewed).toBe(false);
   });
 
   it("blocks missing direction fields", () => {
     const report = sample({
       frames: [{ ...frame, palette: "  ", dramatic_intent: "" }],
     });
-    expect(report.shots[0].missing_direction_fields).toEqual([
+    expect(firstShot(report).missing_direction_fields).toEqual([
       "dramatic_intent",
       "palette",
     ]);
-    expect(report.shots[0].blockers).toContain("required_direction_missing");
+    expect(firstShot(report).blockers).toContain("required_direction_missing");
   });
 
   it("distinguishes optional manual reference absence from direction readiness", () => {
@@ -101,24 +107,24 @@ describe("MIZENZA Step 16 read-only still preflight", () => {
     });
     expect(report.summary.direction_ready).toBe(1);
     expect(report.summary.manual_references_reviewed).toBe(0);
-    expect(report.shots[0].warnings).toContain("manual_reference_missing");
-    expect(report.shots[0].generation.allowed).toBe(false);
+    expect(firstShot(report).warnings).toContain("manual_reference_missing");
+    expect(firstShot(report).generation.allowed).toBe(false);
   });
 
   it("does not treat a broken hash or missing rights declaration as a reviewed image", () => {
     const report = sample({
       frames: [{ ...frame, image_hash: "wrong", rights_note: " " }],
     });
-    expect(report.shots[0].reference.reviewed).toBe(false);
-    expect(report.shots[0].warnings).toContain("reference_hash_invalid");
-    expect(report.shots[0].warnings).toContain("reference_rights_unverified");
+    expect(firstShot(report).reference.reviewed).toBe(false);
+    expect(firstShot(report).warnings).toContain("reference_hash_invalid");
+    expect(firstShot(report).warnings).toContain("reference_rights_unverified");
   });
 
   it("ignores frames belonging to another project and never infers consent", () => {
     const report = sample({ frames: [{ ...frame, project_id: "other-project" }] });
-    expect(report.shots[0].blockers).toContain("storyboard_not_prepared");
-    expect(report.shots[0].reference.present).toBe(false);
-    expect(report.shots[0].reference.rights_independently_verified).toBe(false);
+    expect(firstShot(report).blockers).toContain("storyboard_not_prepared");
+    expect(firstShot(report).reference.present).toBe(false);
+    expect(firstShot(report).reference.rights_independently_verified).toBe(false);
   });
 
   it("produces deterministic no-media output for an empty scene", () => {
