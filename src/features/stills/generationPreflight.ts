@@ -75,11 +75,20 @@ export type StillPreflightReport = {
   shots: ShotPreflight[];
 };
 
+/** Reviews before the current shot-list approval cannot be reused after revocation. */
+export function reviewIsCurrent(reviewedAt: string | null, approvalAt: string | null) {
+  if (!reviewedAt || !approvalAt) return false;
+  const reviewTime = Date.parse(reviewedAt);
+  const approvalTime = Date.parse(approvalAt);
+  return Number.isFinite(reviewTime) && Number.isFinite(approvalTime) && reviewTime >= approvalTime;
+}
+
 export function buildStillPreflightReport({
   projectId,
   sceneId,
   sceneVersion,
   shotListApproved,
+  shotListApprovalAt,
   shots,
   frames,
 }: {
@@ -87,6 +96,7 @@ export function buildStillPreflightReport({
   sceneId: string;
   sceneVersion: number;
   shotListApproved: boolean;
+  shotListApprovalAt: string | null;
   shots: Shot[];
   frames: Frame[];
 }): StillPreflightReport {
@@ -119,7 +129,7 @@ export function buildStillPreflightReport({
       rightsDeclared &&
       sourceCurrent &&
       shotListApproved &&
-      !!frame?.reviewed_at;
+      reviewIsCurrent(frame?.reviewed_at ?? null, shotListApprovalAt);
     const warnings: StillPreflightWarning[] = [];
     if (!hasImage) {
       warnings.push("manual_reference_missing");
