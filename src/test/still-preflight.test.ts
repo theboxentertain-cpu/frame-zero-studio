@@ -41,6 +41,7 @@ const sample = (overrides: Partial<Parameters<typeof buildStillPreflightReport>[
     sceneId,
     sceneVersion: 2,
     shotListApproved: true,
+    shotListApprovalAt: "2026-11-05T00:00:00Z",
     shots: [shot],
     frames: [frame],
     ...overrides,
@@ -81,6 +82,19 @@ describe("MIZENZA Step 16 read-only still preflight", () => {
     const report = sample({ shotListApproved: false });
     expect(report.summary.direction_ready).toBe(0);
     expect(firstShot(report).blockers).toContain("shot_list_not_approved");
+    expect(firstShot(report).reference.reviewed).toBe(false);
+  });
+
+  it("requires a new manual review after shot-list revocation and reapproval", () => {
+    const report = sample({ shotListApprovalAt: "2026-11-07T00:00:00Z" });
+    expect(report.summary.manual_references_reviewed).toBe(0);
+    expect(firstShot(report).reference.reviewed).toBe(false);
+    expect(firstShot(report).warnings).toContain("manual_reference_unreviewed");
+    expect(firstShot(report).generation.allowed).toBe(false);
+  });
+
+  it("does not trust reviewed_at if the active approval has no timestamp", () => {
+    const report = sample({ shotListApprovalAt: null });
     expect(firstShot(report).reference.reviewed).toBe(false);
   });
 
