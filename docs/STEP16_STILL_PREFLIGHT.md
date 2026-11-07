@@ -5,6 +5,7 @@ Status: **source-only draft for review; no production deploy, SQL, media generat
 ## Implemented
 - Pure, deterministic `buildStillPreflightReport` for a scene and its current shot list.
 - Explicit blocker codes when shot-list approval is withdrawn, a frame is absent, the scene/shot version changes or required directing fields are empty.
+- Current shot-list approval timestamp is compared with each manual frame review: after revocation and reapproval, an older review is shown as pending and can be repeated. This is client-side display integrity, not a substitute for the server's approval checks.
 - Independent reference metadata: image attached, SHA-256 claim present, user rights **declared** (never treated as independently licensed), manual review current.
 - Identity, cast likeness and world continuity are **unverified** in this module. The contract must not claim consistent faces or environments without verifiable locked assets.
 - `film_stills` remains locked, `generation.allowed=false`, `provider=not_connected`, `status=not_generated` for every shot and the whole scene.
