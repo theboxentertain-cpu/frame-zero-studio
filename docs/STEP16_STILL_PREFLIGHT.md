@@ -1,6 +1,6 @@
-# MIZENZA Step 16A — Cinematic still preflight contract
+# MIZENZA — Step 15 support: cinematic still preflight contract
 
-Status: **source-only draft for review; no production deploy, SQL, media generation or provider charges**.
+Status: **merged as PR #8 into source, not yet live-production-operational**. The original PR title called this “Step 16A”, but **canonical product Step 16 remains Video Generation Engine**. This file covers a Step 15 supporting engineering task. No production deploy, SQL, AI generation or provider charges were authorized.
 
 ## Implemented
 - Pure, deterministic `buildStillPreflightReport` for a scene and its current shot list.
@@ -10,7 +10,7 @@ Status: **source-only draft for review; no production deploy, SQL, media generat
 - Identity, cast likeness and world continuity are **unverified** in this module. The contract must not claim consistent faces or environments without verifiable locked assets.
 - `film_stills` remains locked, `generation.allowed=false`, `provider=not_connected`, `status=not_generated` for every shot and the whole scene.
 - P12 shows the number of current direction-complete shots, and the JSON handoff includes the `preflight` object without exposing private signed URLs.
-- Eight offline tests enforce negative cases, drift and the false-claims boundary.
+- Offline tests enforce negative cases, drift, reapproval and the false-claims boundary.
 
 ## What the preflight does NOT establish
 - Production authorization, signed release of likeness, permitted likeness rights, or verified provenance of manual references.
@@ -19,7 +19,7 @@ Status: **source-only draft for review; no production deploy, SQL, media generat
 
 The warning `manual_reference_missing` is **not** a direction blocker: future still generators may support text-only concepts, but production generation is always prohibited here. Passing direction checks means only that a written shot instruction is present and current.
 
-## Step 16B requirements before any generator integration
+## Future AI still-generation requirements (not canonical product Step 16)
 1. Review the full Step 15 live staging report and record two-user private-storage/RLS pass, migration 0006, Android import QA.
 2. Establish per-project cast and world **lock IDs** and provenance, with explicit permission status; no face-identity claims from descriptions alone.
 3. Choose provider(s) against verified current contracts, image ownership, safety, cost and documented character-continuity support.
@@ -29,4 +29,4 @@ The warning `manual_reference_missing` is **not** a direction blocker: future st
 7. Keep storyboard **manual references** separate from AI-generated image records. The `film_stills` approval gate cannot be unlocked by client-side preflight, by reference upload, or by a provider's success response.
 
 ## Release boundary
-No provider call, SQL migration, production deployment or gate unlock is included. Step 16A is preparatory engineering; Step 16B is blocked by live staging sign-off and provider feasibility.
+No provider call, SQL migration, production deployment or gate unlock is included. This Step 15 preflight is preparatory engineering; future still-generation integration is blocked by live staging sign-off and provider feasibility. The locked 24-step roadmap continues with canonical Step 16 — Video Generation Engine.

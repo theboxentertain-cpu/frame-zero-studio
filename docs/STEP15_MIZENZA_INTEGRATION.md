@@ -1,6 +1,6 @@
 # MIZENZA — Step 15 integration and staging runbook
 
-Status: development branch only. No production migration, deployment, or AI generation.
+Status (7 November 2026): Step 15 manual storyboard **source merged into main** (PR #3); browser QA and read-only preflight also merged (PRs #5 and #8). The Lovable production database **still lacks the storyboard table/RPCs**; no production SQL migration, launch deployment, or AI generation has occurred. Dedicated staging migration 0006 was only previewed and rolled back; live staging Auth/RLS/private Storage verification and Android device acceptance are still pending.
 
 ## Scope
 
@@ -11,7 +11,7 @@ Status: development branch only. No production migration, deployment, or AI gene
 - All image imports require a human-entered rights/provenance note.
 - Shot plans must remain approved/current before images can be attached or reviewed.
 - Manual frame review **does not** approve the generated film-stills gate.
-- JSON handoff contains direction text only; generation status remains \`not_generated\`.
+- JSON handoff now contains direction text **and read-only preflight status**; generation status remains \`not_generated\`.
 
 ## Database deployment boundary
 

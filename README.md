@@ -1,66 +1,72 @@
-# Frame Zero Studio
+# MIZENZA / ميزنزا
 
-CREATE A NEW PROJECT NAMED "FRAME ZERO" (كادر صفر) under mrahmostudios. It must be completely separate from SLAMS. Build a REAL mobile-first bilingual filmmaker web application, not a landing page or static mockup. This is a cloud-port of an EXISTING locally-built product through Step 14. Existing local source is FastAPI/SQLite, to be ported into Lovable's React/TypeScript and managed PostgreSQL/Supabase architecture. Do not claim that this source is imported (it is not attached due to environment upload limitation); preserve this exact domain contract and report features truthfully.
+**mrahmostudios presents** · *From one thought to the final cut.*
 
-VISION: Premium AI filmmaking product "From one thought to the final cut." Egyptian-Arabic flagship, globally extensible. Strong creative philosophy: story before spectacle; psychologically credible playable acting; motivated camera; restrained color; deliberate cutting; human director control. Four MAIN WORLDS ONLY:
-1 CREATE / ابتكر
-2 CAST & WORLD / الشخصيات والعالم
-3 DIRECT / أخرج
-4 FINISH / أنهِ الفيلم.
-Other utilities are secondary (Project Library, Account, Versions, Budget). Modes STORYTELLER/FILMMAKER/DIRECTOR, selectable and saved. Native Arabic RTL, English LTR, localized labels, accessible 44px touch targets, Android-first bottom tabs, desktop sidebar; typography editorial and cinematic; colors charcoal #0C0E11 / #121519 / #191D22, champagne #D8B37B, ivory #F2F0EB. Avoid generic colorful dashboard, fake AI footage, or placeholder controls disguised as functional.
+MIZENZA is a bilingual Arabic-first / English filmmaking workspace. The Lovable project is still internally labelled **Frame Zero Studio** because this is its original project identifier; it is **not** a different app. The former product name FRAME ZERO / كادر صفر is deprecated. The approved four worlds are **CREATE, CAST & WORLD, DIRECT, FINISH**. The eight-school SLAMS acting app and ROUGHINK screenwriting app are separate projects; do not edit them here.
 
-REQUIRED EXISTING DOMAIN SCOPE (completed locally but NEEDS CLOUD PORT and live security verification):
-P00 Project Library, P01 New Film, P02 Creative Brief /projects/:id/brief, P03 Directing Interpretations /projects/:id/interpretations, P04 Director's Treatment /projects/:id/treatment, P05 Story Map /projects/:id/story,
-P06 Casting Room /projects/:id/cast, P07 Living Actors /projects/:id/performances, P08 World & Region /projects/:id/locations, P09 Dialect & Voice /projects/:id/language,
-P10 Scene Navigator /projects/:id/scenes, P11 Shot Lab /projects/:id/scenes/:sid/plan, P12 Visual Storyboard /projects/:id/scenes/:sid/stills, P13 Production Floor /projects/:id/scenes/:sid/production,
-P14 Retake Room /projects/:id/shots/:shotid/retake, P15 Film Memory /projects/:id/continuity,
-P16 Picture Edit /projects/:id/edit, P17 Sound Studio /projects/:id/sound, P18 Color Studio /projects/:id/grade, P19 Final Cut Guardian /projects/:id/quality, P20 Final Export /projects/:id/export,
-P21 Version History /projects/:id/versions, P22 Budget /projects/:id/budget, P23 Account & Rights /account.
-Preserve stable IDs. Real content and purposeful empty states, distinguish implemented tools from roadmap stages (steps 15+ are NOT operational). Director's Treatment and shot list approval are written-only.
+## Authoritative working state — audited 7 November 2026
 
-USER JOURNEY to make actually work:
-Authenticated user creates private film with title, Arabic/English logline or pitch, region, requested duration 30s/3min/15min/60min DEVELOPMENT ONLY. Project persists, can be reopened after sign-out. Creative Brief has explicit source facts separated from proposed interpretation and approved creative decisions. Save rich notes and versioned revisions. Film analysis and AI features are NOT connected yet; provide honest manual / deterministic planning affordances, not fake AI results.
-Director Interpretation: manual selection of three cinematographic directions (Observational, Spatial Pressure, Selective Perspective), with editable objectives/obstacles/stakes and draft status. Creative Reference Engine: record director/film/acting/color/music reference notes then convert selected attributes to original, non-infringing artistic constraints.
-P04 Film/Sequence/Scene treatments: editable nested scene records, acting/camera/sound/location/continuity intentions, draft/review, source-revision tracking. P06 fictional cast profiles: character identity, individually specified appearance, regional background kept SEPARATE from facial attributes, rights/likeness permission metadata and editable lock state; don't imply actual image locking. P08 World Bibles: governorate, district, place, year, architecture, interiors, props, sound, evidence notes, written lock. P09 Arabic Dialogue/Voice: character-specific dialect and pronunciation, editable dialogue, tactic/pause/overlap/code-switching, source and voice permission notes; no speech generation. P07 Living Actors: one character+scene linked plan with character objective, obstacle, playable tactic, partner cue, listening/reaction, physical action, beats, source-version and written plan lock. P10/P11 shot plans tied to scenes: each shot with drama function, subject, framing, lens rationale, movement trigger/end, blocking, duration, editing reason, continuity constraints; no approval without required fields.
-Treat all suggestions as proposals only, never invented facts. Six approval gates (treatment, world, shot_list, film_stills, motion, final_cut) with only READY if prerequisites exist; no false completed approvals for stills/motion/film.
-Operations: save, edit, archive/restore, optimistic version locks, history, duplicate where possible, solid errors and loading, full Arabic RTL.
+- Connected Lovable project: [MIZENZA editor](https://lovable.dev/projects/fa8d6711-b5ee-47ca-9c57-c9da7f86d0c3).
+- Git repository: [theboxentertain-cpu/frame-zero-studio](https://github.com/theboxentertain-cpu/frame-zero-studio); **`main` is the shared source of truth**. GitHub commits merged to `main` have been observed synchronizing to Lovable. Do not rewrite pushed Git history.
+- After merged [PR #8](https://github.com/theboxentertain-cpu/frame-zero-studio/pull/8), the latest audited application source is commit `028913a63ae9a1e3f84bf263d78c7455193f408c`. This is a **historical audit anchor**, not a permanently fixed HEAD; always inspect current `main` and Lovable's latest SHA.
+- The Lovable project was reported ready and **unpublished**. A ready scaffold or preview is not proof of production readiness.
+- Latest observed full PR CI [run #42318923730](https://github.com/theboxentertain-cpu/frame-zero-studio/actions/runs/42318923730) passed `npm run check`, `npm run test:browser`, and `npm audit --omit=dev --audit-level=high`. Unit, PGlite and browser fixtures are **not live two-user Supabase tests**.
 
-HARD TECH / SECURITY:
-Use actual managed Lovable backend / Supabase for Auth, PostgreSQL, private object storage and row-level security. Default project/private data owner-only: cross-user SELECT/UPDATE/DELETE denied. Avoid service secrets on client. Validate ownership on nested records and source-version drift. Auth and data privacy/rights pages. Test with two users, CSRF/session according to stack, prevent stale concurrent writes. If cloud database cannot be provisioned, transparently report blocker and do not pretend persistence. Do not generate any film, copy film/celebrity likeness, or bill users.
+### Implemented vs blocked
 
-BUILD PRIORITY IN THIS INITIAL TURN:
-A) Actual authentication + secure database + polished functional project library and New Film/Creative Brief.
-B) All 24 routes + 4 major worlds + responsive EN/AR RTL navigation with correctly scoped project context.
-C) Implement as many P03/P04/P06/P07/P08/P09/P10/P11 persisted editors as practical, but report exactly what's built versus scaffold; if credits insufficient, prioritize a genuine secure foundation over fake feature coverage.
-D) Provide explicit status summary, test evidence, blocking issues, URLs, future migration path. Do not falsely claim importing FastAPI ZIP, pass/green on unexecuted security tests, or connected generation providers.
-Please BEGIN THE BUILD rather than discussing it.
+| Area | Evidence / limitation |
+| --- | --- |
+| Four-world navigation, bilingual RTL/LTR and P00–P23 routes | Implemented in source; UI/browser fixtures checked. |
+| Written filmmaking tools, revisions and six approval gates | Implemented/partially implemented according to each route. Generation gates remain locked. |
+| P12 manual storyboard (Step 15) | Source integrated in PR #3 with image imports, private-reference code and provenance fields; browser/file tests passed. It is **not yet operational on the Lovable production backend** because that database is missing the `storyboard_frames` table and related RPCs. |
+| Shot preflight (PR #8) | Read-only checks for approval, source drift, direction completeness and reference metadata; original PR called this "Step 16A" but it is a **Step 15 technical support task, not a canonical renumbering**. It does not generate images. |
+| Real AI image, motion, audio or edited video output | **Not connected**. Do not advertise, charge for, or approve generated media. |
+| Production database / RLS | Lovable database is enabled, with core projects and RLS, but the Step 15 schema is missing. **Security gap:** authenticated roles still have direct `brief_revisions` INSERT and `briefs.current_revision` UPDATE grants, which recovery migration 0002 was meant to revoke. This is tracked in [issue #10](https://github.com/theboxentertain-cpu/frame-zero-studio/issues/10). Staging-only SQL migrations are **not production migrations**. |
+| Staging release security | 0006 rollback-only preview passed; staging 0006 apply and two-account Auth/RLS/private Storage tests are still pending. See [issue #7](https://github.com/theboxentertain-cpu/frame-zero-studio/issues/7). |
+| Real Android acceptance | Pending device-level import, reload, permissions, failed-upload and bilingual layout checks. |
+| Codex local/cloud workspace | **Not verified** from this repository or Lovable. A shared GitHub repository does not prove that a separate Codex checkout is current, clean or able to run. |
 
-This project was built with [Lovable](https://lovable.dev).
+## Canonical product roadmap (do not renumber)
 
-## Build with Lovable
+The approved 24-step product progression is preserved in the [Lovable project knowledge](https://lovable.dev/projects/fa8d6711-b5ee-47ca-9c57-c9da7f86d0c3) and original [historical brief](docs/LEGACY_FRAME_ZERO_INITIAL_BRIEF.md). In particular:
 
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/fa8d6711-b5ee-47ca-9c57-c9da7f86d0c3).
+- **Step 15 — Cinematic Still Studio**: manual shot references and preflight are in source; live migration/security/device verification is pending; AI still generation is not connected.
+- **Step 16 — Video Generation Engine**: future milestone; **not implemented**.
+- Steps 17–24 cover Film Memory, retakes, editing, final-cut quality, proof film, releases, beta/launch, and long-form assembly. No completed-media claims without real media and human review.
+- Prior development PR labels `Step 16A` and `Step 16B` refer to **engineering preparations around still-generation**, not approval to change the locked 24-step product roadmap.
 
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
+## Stop conditions
 
-## Development
+**Do not initiate a production migration, enable film-stills/motion/final-cut approval, call an AI provider, deploy, or claim a finished app** until the live backend issues have been separately reviewed and closed. Review [Step 15 staging runbook](docs/STEP15_STAGING_0006_RUNBOOK.md), [release gate #7](https://github.com/theboxentertain-cpu/frame-zero-studio/issues/7), and [security findings](docs/SECURITY_FINDINGS.md).
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+The dedicated staging Supabase project is different from Lovable production. Migration 0006 was **previewed and rolled back** in staging, not applied. Never run `drizzle-kit push`: `drizzle/schema.ts` is an empty stub. Review forward-only SQL explicitly for the target environment. Do not copy staging credentials or service-role keys into code.
+
+## Local / Codex verification
+
+Use Node 24 with the tested npm lockfile:
 
 ```sh
-git clone <this-repository-url>
-cd <repository-name>
+git remote -v
+git branch --show-current
+git status --short
+git fetch origin main
+git rev-parse HEAD
+git rev-parse origin/main
 npm ci
-cp .env.example .env # configure the public staging backend values locally
-npm run dev
+npm run check
+npx playwright install chromium
+npm run test:browser
+npm audit --omit=dev --audit-level=high
 ```
 
-## Recovery verification
+On the intended `main` checkout, `HEAD` should equal `origin/main` and `git status --short` should show no changes. If that is not true, **inspect and preserve work rather than resetting or force-pushing**. Environment configuration needs `.env.example`'s public variables; never put credentials in chat or public commits.
 
-See [feature audit](docs/RECOVERY_AUDIT.md) and [security findings](docs/SECURITY_FINDINGS.md) before deployment. Original Step 14 FastAPI/SQLite source is not present. Recovered tools are written planning editors; AI/media generation remains unavailable.
+## References
 
-Use Node 24 and `npm ci` for the tested dependency graph (`package-lock.json`). The existing Bun lock is also refreshed for Lovable compatibility; CI uses npm. Run `npm run check`, then `npm run test:browser`. Browser tests use the installed Chromium when present, `CHROMIUM_PATH` when configured, or Playwright's bundled browser (`npx playwright install chromium`). They use an isolated API fixture, not live Supabase. Database tests execute migrations in an isolated PostgreSQL engine. Live staging checks and required secure variable names are documented in the security findings.
-
-Never run schema push against production: `drizzle/schema.ts` is an empty generated stub. Review additive SQL migrations on staging. No database migration or environment publication is part of local checks.
+- [Canonical shared project knowledge for Lovable, Codex and ChatGPT](docs/MIZENZA_PROJECT_KNOWLEDGE.md)
+- [Legacy initial brief — archived, not authoritative](docs/LEGACY_FRAME_ZERO_INITIAL_BRIEF.md)
+- [Step 15 integration report](docs/STEP15_MIZENZA_INTEGRATION.md)
+- [Step 15 staged migration/security workflow](docs/STEP15_STAGING_0006_RUNBOOK.md)
+- [Read-only still preflight contract (legacy Step 16A PR title)](docs/STEP16_STILL_PREFLIGHT.md)
+- [Recovery audit (historical)](docs/RECOVERY_AUDIT.md)
+- [Security findings](docs/SECURITY_FINDINGS.md)
