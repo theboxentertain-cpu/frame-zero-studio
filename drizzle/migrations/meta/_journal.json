@@ -50,6 +50,13 @@
       "when": 1793685000006,
       "tag": "0006_step15_approval_integrity",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1793685000007,
+      "tag": "0007_revision_acl_hardening",
+      "breakpoints": true
     }
   ]
 }
