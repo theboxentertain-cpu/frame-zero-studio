@@ -39,7 +39,11 @@ await db.exec(
 );
 await db.exec("GRANT ALL PRIVILEGES ON public.storyboard_frames TO anon, authenticated");
 assert.equal(
-  (await db.query("SELECT has_table_privilege('anon','public.storyboard_frames','TRUNCATE') AS permitted")).rows[0].permitted,
+  (
+    await db.query(
+      "SELECT has_table_privilege('anon','public.storyboard_frames','TRUNCATE') AS permitted",
+    )
+  ).rows[0].permitted,
   true,
 );
 for (const f of ["0007_revision_acl_hardening.sql", "0008_privileged_table_access_lockdown.sql"]) {
