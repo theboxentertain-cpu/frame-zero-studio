@@ -486,12 +486,7 @@ function FrameCard({
           <Button
             variant="frame"
             disabled={
-              busy ||
-              !fresh ||
-              !shotListApproved ||
-              dirty ||
-              !frame.image_path ||
-              reviewFresh
+              busy || !fresh || !shotListApproved || dirty || !frame.image_path || reviewFresh
             }
             onClick={review}
           >
