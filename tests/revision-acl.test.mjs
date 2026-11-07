@@ -93,10 +93,7 @@ test("owner can edit the brief and save a controlled immutable revision", async 
        WHERE project_id=$1`,
       [project],
     );
-    const snapshot = await db.query(
-      "SELECT fz_save_brief_revision($1) AS version",
-      [project],
-    );
+    const snapshot = await db.query("SELECT fz_save_brief_revision($1) AS version", [project]);
     assert.equal(snapshot.rows[0].version, 1);
     const revision = await db.query(
       "SELECT revision_no,notes FROM public.brief_revisions WHERE project_id=$1",
