@@ -42,8 +42,12 @@ def connection_string() -> str:
         raise ValueError("Database identity is not the locked MIZENZA staging project.")
     if not unquote(parsed.password or ""):
         raise ValueError("Empty staging password.")
-    if os.environ.get("GITHUB_REF") != "refs/heads/security/staging-acl-rollback-preview-20261107":
-        raise ValueError("Preview must run on its dedicated review branch.")
+    event = os.environ.get("GITHUB_EVENT_NAME")
+    ref = os.environ.get("GITHUB_REF")
+    review_push = event == "push" and ref == "refs/heads/security/staging-acl-rollback-preview-20261107"
+    manual_main = event == "workflow_dispatch" and ref == "refs/heads/main"
+    if not (review_push or manual_main):
+        raise ValueError("Preview only permitted on review-branch push or manual main dispatch.")
     return dsn
 
 
