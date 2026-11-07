@@ -94,10 +94,7 @@ describe("MIZENZA Step 16 read-only still preflight", () => {
     const report = sample({
       frames: [{ ...frame, palette: "  ", dramatic_intent: "" }],
     });
-    expect(firstShot(report).missing_direction_fields).toEqual([
-      "dramatic_intent",
-      "palette",
-    ]);
+    expect(firstShot(report).missing_direction_fields).toEqual(["dramatic_intent", "palette"]);
     expect(firstShot(report).blockers).toContain("required_direction_missing");
   });
 
