@@ -63,6 +63,7 @@ On the intended `main` checkout, `HEAD` should equal `origin/main` and `git stat
 
 ## References
 
+- [Canonical shared project knowledge for Lovable, Codex and ChatGPT](docs/MIZENZA_PROJECT_KNOWLEDGE.md)
 - [Legacy initial brief — archived, not authoritative](docs/LEGACY_FRAME_ZERO_INITIAL_BRIEF.md)
 - [Step 15 integration report](docs/STEP15_MIZENZA_INTEGRATION.md)
 - [Step 15 staged migration/security workflow](docs/STEP15_STAGING_0006_RUNBOOK.md)
