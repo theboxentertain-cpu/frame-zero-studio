@@ -57,6 +57,13 @@
       "when": 1793685000007,
       "tag": "0007_revision_acl_hardening",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1793685000008,
+      "tag": "0008_privileged_table_access_lockdown",
+      "breakpoints": true
     }
   ]
 }
