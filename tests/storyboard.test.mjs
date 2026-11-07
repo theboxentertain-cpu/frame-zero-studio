@@ -31,6 +31,24 @@ for (const f of [
 ]) {
   await db.exec(readFileSync(new URL("../drizzle/migrations/" + f, import.meta.url), "utf8"));
 }
+
+// Reproduce staging's dangerous elevated grants before applying the candidates.
+// This is isolated PGlite, never a live Supabase test.
+await db.exec(
+  "GRANT TRUNCATE, REFERENCES, TRIGGER ON ALL TABLES IN SCHEMA public TO authenticated",
+);
+await db.exec("GRANT ALL PRIVILEGES ON public.storyboard_frames TO anon, authenticated");
+assert.equal(
+  (
+    await db.query(
+      "SELECT has_table_privilege('anon','public.storyboard_frames','TRUNCATE') AS permitted",
+    )
+  ).rows[0].permitted,
+  true,
+);
+for (const f of ["0007_revision_acl_hardening.sql", "0008_privileged_table_access_lockdown.sql"]) {
+  await db.exec(readFileSync(new URL("../drizzle/migrations/" + f, import.meta.url), "utf8"));
+}
 const a = "11111111-1111-4111-8111-111111111111";
 const b = "22222222-2222-4222-8222-222222222222";
 await db.query("INSERT INTO auth.users(id,email) VALUES ($1,$2),($3,$4)", [
@@ -48,6 +66,34 @@ async function asUser(id, fn) {
     await db.exec("RESET ROLE");
   }
 }
+test("staging ACL regression rejects RLS-bypassing TRUNCATE for all public tables", async () => {
+  const rows = (
+    await db.query(`SELECT c.relname AS name,
+      has_table_privilege('authenticated', c.oid, 'TRUNCATE') AS auth_truncate,
+      has_table_privilege('anon', c.oid, 'TRUNCATE') AS anon_truncate
+      FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace
+      WHERE n.nspname='public' AND c.relkind IN ('r','p')`)
+  ).rows;
+  assert.equal(rows.length, 20);
+  for (const row of rows) {
+    assert.equal(row.auth_truncate, false, row.name);
+    assert.equal(row.anon_truncate, false, row.name);
+  }
+  for (const role of ["anon", "authenticated"]) {
+    for (const action of ["TRUNCATE", "INSERT", "UPDATE", "DELETE"]) {
+      const result = await db.query(
+        "SELECT has_table_privilege($1,'public.storyboard_frames',$2) AS permitted",
+        [role, action],
+      );
+      assert.equal(result.rows[0].permitted, false, role + " " + action);
+    }
+  }
+  const result = await db.query(
+    "SELECT has_table_privilege('authenticated','public.storyboard_frames','SELECT') AS permitted",
+  );
+  assert.equal(result.rows[0].permitted, true);
+});
+
 let project, shot, frame;
 test("Prepare only an approved, current shot plan", async () => {
   await asUser(a, async () => {
