@@ -28,6 +28,7 @@ for (const f of [
   "0004_step15_review.sql",
   "0005_step15_versioned_writes.sql",
   "0006_step15_approval_integrity.sql",
+  "0007_revision_acl_hardening.sql",
 ]) {
   await db.exec(readFileSync(new URL("../drizzle/migrations/" + f, import.meta.url), "utf8"));
 }
