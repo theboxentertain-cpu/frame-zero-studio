@@ -20,6 +20,7 @@ import {
   type Shot,
   type DirectionField,
 } from "./data";
+import { buildStillPreflightReport, reviewIsCurrent } from "./generationPreflight";
 
 const Q = (p: string, s: string) => ["storyboard", p, s] as const;
 
@@ -45,16 +46,26 @@ export function StillStudio({ projectId, sceneId }: { projectId: string; sceneId
         </span>
       </p>
     );
-  const { shots = [], frames = [], sceneVersion = 0, shotListApproved = false } = query.data ?? {};
+  const {
+    shots = [],
+    frames = [],
+    sceneVersion = 0,
+    shotListApproved = false,
+    shotListApprovalAt = null,
+  } = query.data ?? {};
   const prepared = shots.filter((s) =>
     frames.some((f) => f.shot_id === s.id && current(f, s, sceneVersion)),
   ).length;
-  const reviewed = shots.filter((s) =>
-    frames.some(
-      (f) =>
-        f.shot_id === s.id && current(f, s, sceneVersion) && !!f.reviewed_at && shotListApproved,
-    ),
-  ).length;
+  const preflight = buildStillPreflightReport({
+    projectId,
+    sceneId,
+    sceneVersion,
+    shotListApproved,
+    shotListApprovalAt,
+    shots,
+    frames,
+  });
+  const reviewed = preflight.summary.manual_references_reviewed;
   async function prepareAll() {
     setBusy(true);
     try {
@@ -111,6 +122,10 @@ export function StillStudio({ projectId, sceneId }: { projectId: string; sceneId
           <Badge variant={reviewed === shots.length && shots.length > 0 ? "live" : "partial"}>
             {reviewed}/{shots.length} {tx({ en: "references reviewed", ar: "مراجع تمت مراجعتها" })}
           </Badge>
+          <Badge variant="partial">
+            {preflight.summary.direction_ready}/{shots.length}{" "}
+            {tx({ en: "directions checked", ar: "تعليمات تم التحقق منها" })}
+          </Badge>
           <Badge variant="roadmap">
             {tx({ en: "AI generation: not connected", ar: "التوليد بالذكاء الاصطناعي: غير متصل" })}
           </Badge>
@@ -128,9 +143,22 @@ export function StillStudio({ projectId, sceneId }: { projectId: string; sceneId
           <Button
             variant="outline"
             disabled={shots.length === 0}
-            onClick={() => downloadStoryboardManifest(projectId, sceneId, frames, shots)}
+            onClick={() =>
+              downloadStoryboardManifest(
+                projectId,
+                sceneId,
+                frames,
+                shots,
+                sceneVersion,
+                shotListApproved,
+                shotListApprovalAt,
+              )
+            }
           >
-            {tx({ en: "Export shot handoff JSON", ar: "تصدير تعليمات اللقطات JSON" })}
+            {tx({
+              en: "Export shots + preflight JSON",
+              ar: "تصدير اللقطات وتقرير التحقق JSON",
+            })}
           </Button>
         </div>
         {shots.length === 0 && (
@@ -166,7 +194,7 @@ export function StillStudio({ projectId, sceneId }: { projectId: string; sceneId
                   variant={
                     !current(frame, shot, sceneVersion) || !shotListApproved
                       ? "partial"
-                      : frame.reviewed_at
+                      : reviewIsCurrent(frame.reviewed_at, shotListApprovalAt)
                         ? "live"
                         : "partial"
                   }
@@ -175,7 +203,7 @@ export function StillStudio({ projectId, sceneId }: { projectId: string; sceneId
                     ? tx({ en: "Source changed", ar: "تغير المصدر" })
                     : !shotListApproved
                       ? tx({ en: "Shot-list approval missing", ar: "اعتماد قائمة اللقطات مفقود" })
-                      : frame.reviewed_at
+                      : reviewIsCurrent(frame.reviewed_at, shotListApprovalAt)
                         ? tx({ en: "Manual reference reviewed", ar: "تمت مراجعة المرجع اليدوي" })
                         : tx({ en: "Draft / awaiting review", ar: "مسودة / تنتظر المراجعة" })}
                 </Badge>
@@ -188,6 +216,7 @@ export function StillStudio({ projectId, sceneId }: { projectId: string; sceneId
                 shot={shot}
                 sceneVersion={sceneVersion}
                 shotListApproved={shotListApproved}
+                shotListApprovalAt={shotListApprovalAt}
                 onUpdated={refresh}
               />
             ) : (
@@ -210,12 +239,14 @@ function FrameCard({
   shot,
   sceneVersion,
   shotListApproved,
+  shotListApprovalAt,
   onUpdated,
 }: {
   frame: Frame;
   shot: Shot;
   sceneVersion: number;
   shotListApproved: boolean;
+  shotListApprovalAt: string | null;
   onUpdated: () => Promise<unknown>;
 }) {
   const { tx, locale } = useI18n();
@@ -251,6 +282,8 @@ function FrameCard({
     };
   }, [frame.image_path]);
   const fresh = current(frame, shot, sceneVersion);
+  const reviewFresh =
+    fresh && shotListApproved && reviewIsCurrent(frame.reviewed_at, shotListApprovalAt);
   const present = (key: DirectionField) => String(draft[key] ?? "");
   const update = (key: DirectionField, val: string) => {
     setDraft((d) => ({ ...d, [key]: val }));
@@ -453,12 +486,7 @@ function FrameCard({
           <Button
             variant="frame"
             disabled={
-              busy ||
-              !fresh ||
-              !shotListApproved ||
-              dirty ||
-              !frame.image_path ||
-              !!frame.reviewed_at
+              busy || !fresh || !shotListApproved || dirty || !frame.image_path || reviewFresh
             }
             onClick={review}
           >

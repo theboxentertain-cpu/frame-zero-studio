@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import { buildStillPreflightReport } from "./generationPreflight";
 
 export type Shot = {
   id: string;
@@ -86,13 +87,13 @@ export async function fetchStoryboard(projectId: string, sceneId: string) {
   if (sceneResult.error) throw sceneResult.error;
   if (frameResult.error) throw frameResult.error;
   if (gateResult.error) throw gateResult.error;
+  const shotGate = (gateResult.data ?? []).find((g) => g.gate === "shot_list");
   return {
     shots: (shotResult.data ?? []) as Shot[],
     sceneVersion: sceneResult.data!.version as number,
     frames: (frameResult.data ?? []) as Frame[],
-    shotListApproved: (gateResult.data ?? []).some(
-      (g) => g.gate === "shot_list" && g.approved && g.ready && !g.stale,
-    ),
+    shotListApproved: !!shotGate?.approved && !!shotGate.ready && !shotGate.stale,
+    shotListApprovalAt: shotGate?.approved_at ?? null,
   };
 }
 export function current(frame: Frame, shot: Shot, sceneVersion: number) {
@@ -218,7 +219,19 @@ export function downloadStoryboardManifest(
   sceneId: string,
   frames: Frame[],
   shots: Shot[],
+  sceneVersion: number,
+  shotListApproved: boolean,
+  shotListApprovalAt: string | null,
 ) {
+  const preflight = buildStillPreflightReport({
+    projectId,
+    sceneId,
+    sceneVersion,
+    shotListApproved,
+    shotListApprovalAt,
+    shots,
+    frames,
+  });
   const material = shots.map((shot) => {
     const frame = frames.find((f) => f.shot_id === shot.id);
     return {
@@ -241,6 +254,7 @@ export function downloadStoryboardManifest(
           project_id: projectId,
           scene_id: sceneId,
           media_status: "manual_references_only",
+          preflight,
           shots: material,
         },
         null,
