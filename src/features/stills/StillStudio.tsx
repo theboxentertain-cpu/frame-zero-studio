@@ -20,6 +20,7 @@ import {
   type Shot,
   type DirectionField,
 } from "./data";
+import { buildStillPreflightReport } from "./generationPreflight";
 
 const Q = (p: string, s: string) => ["storyboard", p, s] as const;
 
@@ -55,6 +56,14 @@ export function StillStudio({ projectId, sceneId }: { projectId: string; sceneId
         f.shot_id === s.id && current(f, s, sceneVersion) && !!f.reviewed_at && shotListApproved,
     ),
   ).length;
+  const preflight = buildStillPreflightReport({
+    projectId,
+    sceneId,
+    sceneVersion,
+    shotListApproved,
+    shots,
+    frames,
+  });
   async function prepareAll() {
     setBusy(true);
     try {
@@ -111,6 +120,10 @@ export function StillStudio({ projectId, sceneId }: { projectId: string; sceneId
           <Badge variant={reviewed === shots.length && shots.length > 0 ? "live" : "partial"}>
             {reviewed}/{shots.length} {tx({ en: "references reviewed", ar: "مراجع تمت مراجعتها" })}
           </Badge>
+          <Badge variant="partial">
+            {preflight.summary.direction_ready}/{shots.length}{" "}
+            {tx({ en: "directions checked", ar: "تعليمات تم التحقق منها" })}
+          </Badge>
           <Badge variant="roadmap">
             {tx({ en: "AI generation: not connected", ar: "التوليد بالذكاء الاصطناعي: غير متصل" })}
           </Badge>
@@ -128,9 +141,21 @@ export function StillStudio({ projectId, sceneId }: { projectId: string; sceneId
           <Button
             variant="outline"
             disabled={shots.length === 0}
-            onClick={() => downloadStoryboardManifest(projectId, sceneId, frames, shots)}
+            onClick={() =>
+              downloadStoryboardManifest(
+                projectId,
+                sceneId,
+                frames,
+                shots,
+                sceneVersion,
+                shotListApproved,
+              )
+            }
           >
-            {tx({ en: "Export shot handoff JSON", ar: "تصدير تعليمات اللقطات JSON" })}
+            {tx({
+              en: "Export shots + preflight JSON",
+              ar: "تصدير اللقطات وتقرير التحقق JSON",
+            })}
           </Button>
         </div>
         {shots.length === 0 && (
