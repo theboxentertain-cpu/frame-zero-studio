@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import { buildStillPreflightReport } from "./generationPreflight";
 
 export type Shot = {
   id: string;
@@ -218,7 +219,17 @@ export function downloadStoryboardManifest(
   sceneId: string,
   frames: Frame[],
   shots: Shot[],
+  sceneVersion: number,
+  shotListApproved: boolean,
 ) {
+  const preflight = buildStillPreflightReport({
+    projectId,
+    sceneId,
+    sceneVersion,
+    shotListApproved,
+    shots,
+    frames,
+  });
   const material = shots.map((shot) => {
     const frame = frames.find((f) => f.shot_id === shot.id);
     return {
@@ -241,6 +252,7 @@ export function downloadStoryboardManifest(
           project_id: projectId,
           scene_id: sceneId,
           media_status: "manual_references_only",
+          preflight,
           shots: material,
         },
         null,
