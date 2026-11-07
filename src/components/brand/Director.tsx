@@ -140,7 +140,9 @@ export function Director({
                   key={r.key}
                   className="border-s-2 border-crimson/70 ps-3 text-sm leading-relaxed text-ivory/90"
                 >
-                  <span className="font-display text-base italic">“{tx(r.text)}”</span>
+                  <span className="font-display text-base ltr:italic rtl:not-italic">
+                    “{tx(r.text)}”
+                  </span>
                   {r.seg && projectId && (
                     <Link
                       to={`/projects/$id/${r.seg}` as "/projects/$id/brief"}

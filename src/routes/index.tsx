@@ -73,7 +73,7 @@ function Landing() {
           <h1 className="mt-4 font-display text-5xl leading-[1.05] text-ivory md:text-7xl">
             {t("philosophy")}
           </h1>
-          <p className="mt-4 max-w-xl font-display text-xl italic text-brass md:text-2xl">
+          <p className="mt-4 max-w-xl font-display text-xl text-brass ltr:italic rtl:not-italic md:text-2xl">
             {t("tagline")}
           </p>
           <p className="mt-6 max-w-xl text-base text-muted-foreground md:text-lg">
