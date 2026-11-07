@@ -9,6 +9,7 @@ on:
       - ".github/workflows/staging-acl-preview.yml"
       - "drizzle/migrations/0007_revision_acl_hardening.sql"
       - "drizzle/migrations/0008_privileged_table_access_lockdown.sql"
+  workflow_dispatch:
 
 permissions:
   contents: read
