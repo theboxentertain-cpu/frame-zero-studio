@@ -28,7 +28,7 @@ function PresenceSwitch({
   value: DirectorPresence;
   onChange: (p: DirectorPresence) => void;
 }) {
-  const { tx } = useI18n();
+  const { tx, locale } = useI18n();
   const opts: { v: DirectorPresence; l: { en: string; ar: string } }[] = [
     { v: "on", l: { en: "On", ar: "حاضر" } },
     { v: "quiet", l: { en: "Quiet", ar: "هادئ" } },
@@ -140,7 +140,7 @@ export function Director({
                   key={r.key}
                   className="border-s-2 border-crimson/70 ps-3 text-sm leading-relaxed text-ivory/90"
                 >
-                  <span className="font-display text-base ltr:italic rtl:not-italic">
+                  <span className={`font-display text-base ${locale === "ar" ? "not-italic" : "italic"}`}>
                     “{tx(r.text)}”
                   </span>
                   {r.seg && projectId && (
