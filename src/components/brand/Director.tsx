@@ -28,7 +28,7 @@ function PresenceSwitch({
   value: DirectorPresence;
   onChange: (p: DirectorPresence) => void;
 }) {
-  const { tx, locale } = useI18n();
+  const { tx } = useI18n();
   const opts: { v: DirectorPresence; l: { en: string; ar: string } }[] = [
     { v: "on", l: { en: "On", ar: "حاضر" } },
     { v: "quiet", l: { en: "Quiet", ar: "هادئ" } },
@@ -75,7 +75,7 @@ export function Director({
   showScope?: boolean;
   className?: string;
 }) {
-  const { tx } = useI18n();
+  const { tx, locale } = useI18n();
   const [presence, setPresence] = useDirectorPresence();
 
   if (presence === "off") {
