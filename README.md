@@ -69,4 +69,5 @@ On the intended `main` checkout, `HEAD` should equal `origin/main` and `git stat
 - [Step 15 staged migration/security workflow](docs/STEP15_STAGING_0006_RUNBOOK.md)
 - [Read-only still preflight contract (legacy Step 16A PR title)](docs/STEP16_STILL_PREFLIGHT.md)
 - [Recovery audit (historical)](docs/RECOVERY_AUDIT.md)
+- [Lovable Cloud recovery guide — English / العربية](docs/LOVABLE_CLOUD_RECOVERY_GUIDE.md)
 - [Security findings](docs/SECURITY_FINDINGS.md)
